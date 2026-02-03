@@ -29,6 +29,49 @@ def autoconsumo_bonus_from_kwp(kwp_bonus: float) -> float:
     return points[0][1]
 
 
+# ==========================================================
+# FUNZIONE PRINCIPALE USATA DA app.py
+# ==========================================================
+
+def simulate(
+    consumo,
+    potenza_base,
+    potenza_bonus,
+    costo_impianto,
+    prezzo_energia,
+    rid,
+    cer,
+    quota_condivisa,
+    resa,
+    autoc_base
+):
+    """
+    Simulazione completa:
+    - autoconsumo bonus calcolato automaticamente
+    - benefici coerenti con Excel
+    """
+
+    autoc_bonus = autoconsumo_bonus_from_kwp(potenza_bonus)
+
+    return compute_benefits(
+        consumo_kwh=consumo,
+        base_kwp=potenza_base,
+        bonus_kwp=potenza_bonus,
+        prezzo_energia=prezzo_energia,
+        rid_eur_kwh=rid,
+        cer_eur_kwh=cer,
+        quota_condivisa=quota_condivisa,
+        costo_impianto=costo_impianto,
+        resa_kwh_kwp=resa,
+        autoc_base_perc=autoc_base,
+        autoc_bonus_perc=autoc_bonus,
+    )
+
+
+# ==========================================================
+# CALCOLO BENEFICI (COERENTE CON EXCEL)
+# ==========================================================
+
 def compute_benefits(
     consumo_kwh: float,
     base_kwp: float,
@@ -42,56 +85,55 @@ def compute_benefits(
     autoc_base_perc: float,
     autoc_bonus_perc: float,
 ) -> dict:
-    """
-    Calcolo coerente con Excel, con 2 correzioni:
-    1) Delta autoconsumo calcolato sui kWh REALI (dopo clamp su produzione).
-    2) Risparmio bolletta calcolato su autoconsumo totale MA ESCLUDENDO l'extra autoconsumo
-       (per evitare doppio conteggio con la voce "vantaggio extra autoconsumo").
-    """
 
     # Produzioni
     produzione_base = base_kwp * resa_kwh_kwp
     produzione_bonus = bonus_kwp * resa_kwh_kwp
 
-    # Autoconsumi teorici (su consumo)
+    # Autoconsumi teorici
     autoc_base_teorico = consumo_kwh * autoc_base_perc
     autoc_bonus_teorico = consumo_kwh * autoc_bonus_perc
 
-    # Clamp fisico: non posso autoconsumare più della produzione di quell'impianto
+    # Clamp fisico
     autoconsumo_base = min(autoc_base_teorico, produzione_base)
     autoconsumo_bonus = min(autoc_bonus_teorico, produzione_bonus)
 
     # Energia immessa
     energia_immessa = max(produzione_bonus - autoconsumo_bonus, 0)
 
-    # ✅ Delta autoconsumo REALE (kWh) = differenza tra bonus e base dopo clamp
+    # Delta autoconsumo reale
     delta_autoconsumo = max(autoconsumo_bonus - autoconsumo_base, 0)
 
-    # Vantaggio extra autoconsumo (€/anno)
+    # Extra autoconsumo (€)
     vantaggio_extra_autoconsumo = delta_autoconsumo * prezzo_energia
 
     # RID e CER
     rid_annuo = energia_immessa * rid_eur_kwh
     cer_prudente = energia_immessa * quota_condivisa * cer_eur_kwh
 
-    totale_benefici_annui = vantaggio_extra_autoconsumo + rid_annuo + cer_prudente
+    totale_benefici_annui = (
+        vantaggio_extra_autoconsumo
+        + rid_annuo
+        + cer_prudente
+    )
 
-    # Detrazione 50% in 10 anni
+    # Detrazione fiscale
     detrazione_totale = costo_impianto * 0.50
     detrazione_annua = detrazione_totale / 10
 
     beneficio_annuale_totale = totale_benefici_annui + detrazione_annua
 
-    # ✅ 10 anni: (benefici annui + detrazione annua) * 10
+    # Beneficio 10 anni
     beneficio_10_anni = beneficio_annuale_totale * 10
 
-    # ✅ 20 anni: benefici annui * 20 + detrazione annua * 10 (NO raddoppio detrazione)
-    beneficio_20_anni = (totale_benefici_annui * 20) + (detrazione_annua * 10)
+    # Beneficio 20 anni (detrazione solo per 10 anni)
+    beneficio_20_anni = (totale_benefici_annui * 20) + detrazione_totale
 
-    # ✅ RISPARMIO IN BOLLETTA (evita doppio conteggio):
-    # risparmio totale da autoconsumo bonus - valore extra già contabilizzato
-    # = (autoconsumo_bonus * prezzo) - (delta_autoconsumo * prezzo)
-    risparmio_bolletta = max((autoconsumo_bonus - delta_autoconsumo), 0) * prezzo_energia
+    # Risparmio bolletta (senza doppio conteggio extra)
+    risparmio_bolletta = max(
+        (autoconsumo_bonus - delta_autoconsumo),
+        0
+    ) * prezzo_energia
 
     # Risparmio complessivo
     risparmio_complessivo_annuo = beneficio_annuale_totale + risparmio_bolletta
@@ -111,15 +153,17 @@ def compute_benefits(
         "rid_annuo": rid_annuo,
         "cer_prudente": cer_prudente,
         "totale_benefici_annui": totale_benefici_annui,
+
+        # Detrazione
         "detrazione_totale": detrazione_totale,
         "detrazione_annua": detrazione_annua,
-        "beneficio_annuale_totale": beneficio_annuale_totale,
 
-        # Tempo
+        # Totali
+        "beneficio_annuale_totale": beneficio_annuale_totale,
         "beneficio_10_anni": beneficio_10_anni,
         "beneficio_20_anni": beneficio_20_anni,
 
-        # Bolletta (senza doppio conteggio extra)
+        # Bolletta
         "risparmio_bolletta": risparmio_bolletta,
         "risparmio_complessivo_annuo": risparmio_complessivo_annuo,
         "risparmio_complessivo_10": risparmio_complessivo_10,
