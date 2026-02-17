@@ -71,7 +71,7 @@ def build_pdf(cliente, res, costo_impianto):
     # PAGINA 1 — QUADRO COMMERCIALE
     # =====================================================
 
-    story.append(Paragraph("Promozione Firmasubito 'Upgrade NEXT' con incentivo CER", styles["Title"]))
+    story.append(Paragraph("Promozione Firmasubito con SISTEMA DI RENDITA ENERGETICA ATTIVA", styles["Title"]))
     story.append(Spacer(1, 15))
 
     story.append(Paragraph(f"<b>Cliente:</b> {cliente}", styles["Normal"]))
@@ -80,19 +80,19 @@ def build_pdf(cliente, res, costo_impianto):
 
     testo_intro = f"""
     Un upgrade immediato che moltiplica produzione, autoconsumo e ritorno economico grazie anche alla Comunità Energetica.
-    Attraverso questi incentivi acceleri esponenzialmente il recupero del capitalke investito. L'agevolazione è notevolmente superiore drispetto al costo dell'impianto.
+    Attraverso questi incentivi acceleri esponenzialmente il recupero del capitale investito. L'agevolazione è notevolmente superiore rispetto al costo dell'impianto.
 
     <br/><br/>
-    Con l'Upgrade NEXT + CER, il cliente ottiene tre vantaggi simultanei:
+    Con la Promozione Firmasubito e grazie al sistema di rendimento attivo di Next srl, il cliente ottiene, in aggiunta alla detrazione fiscale del 50% in 10 anni, tre vantaggi simultanei:
 
     <br/><br/>
     <b>1. Upgrade NEXT</b>: l’impianto viene potenziato, aumentando l’autoconsumo reale, sopratutto nei mesi invernali, quando ogni kWh in più fa la differenza.<br/>
-    <b>2. Energia immessa valorizzata</b>: l’energia non consumata viene venduta tramite RID.<br/>
+    <b>2. Energia immessa valorizzata</b>: l’energia non consumata viene venduta tramite RID a valori di mercato.<br/>
     <b>3. Incentivo Comunità Energetica (CER)</b>: premio aggiuntivo sull’energia condivisa. Aderendo alla CER, il cliente riceve un ulteriore incentivo economico sull’energia immessa e condivisa, amplificando ancora di più il ritorno annuale.
 
     <br/><br/>
     Il risultato è un flusso economico annuo positivo che accelera il rientro
-    dell’investimento e trasforma il fotovoltaico in un asset che genera valore. Aquesto si aggiunge il taglio della spesa energetica.
+    dell’investimento e trasforma il fotovoltaico in un asset che genera valore. A questo si aggiunge il taglio della spesa energetica.
     """
 
     story.append(Paragraph(testo_intro, styles["BodyText"]))
