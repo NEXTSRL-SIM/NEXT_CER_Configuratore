@@ -126,7 +126,7 @@ st.divider()
 
 st.header("📄 Report Cliente (PDF)")
 
-if st.button("📌 Genera Report Firmasubito PDF"):
+if st.button("📌 Genera Report PDF VEN/FRIULI"):
     pdf_path = build_pdf(cliente, res, costo)
     with open(pdf_path, "rb") as f:
         st.download_button(
