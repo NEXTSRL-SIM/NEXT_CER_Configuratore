@@ -346,8 +346,10 @@ def build_pdf(cliente, res, costo_impianto):
         "trasformare oggi una spesa futura incerta in un flusso di valore (rendita) definito "
         "e potenzialmente crescente nel tempo.",
         ""
-        "NEXT SRL - Report sinulazione"
-        "valori indicativi"
+        "NEXT SRL - Report sinulazione",
+        "",
+        "valori indicativi",
+        ""
         f"{oggi}"
     ]
 
