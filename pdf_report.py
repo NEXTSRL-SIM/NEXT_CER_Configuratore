@@ -344,7 +344,11 @@ def build_pdf(cliente, res, costo_impianto):
         "",
         "Scegliere di attivare il Sistema di Rendita Energetica Attiva Next significa "
         "trasformare oggi una spesa futura incerta in un flusso di valore (rendita) definito "
-        "e potenzialmente crescente nel tempo."
+        "e potenzialmente crescente nel tempo.",
+        ""
+        "NEXT SRL - Report sinulazione"
+        "valori indicativi"
+        f"{oggi}"
     ]
 
     for p in testo_chiusura:
