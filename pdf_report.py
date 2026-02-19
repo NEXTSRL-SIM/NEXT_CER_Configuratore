@@ -85,9 +85,7 @@ def build_pdf(cliente, res, costo_impianto):
     story.append(Paragraph(f"<b>Data simulazione:</b> {oggi}", styles["Normal"]))
     story.append(Spacer(1, 20))
 
-    # --- TESTO COMPLETO COME VERSIONE APPROVATA ---
-
-    paragrafi = [
+    testo_pagina1 = [
         "Questa iniziativa nasce da un’idea molto semplice.",
         "Quando si realizza un impianto fotovoltaico residenziale, normalmente si sceglie una potenza “sufficiente”.",
         "Noi abbiamo scelto un approccio diverso.",
@@ -96,19 +94,17 @@ def build_pdf(cliente, res, costo_impianto):
         "Abbiamo suddiviso gli impianti monofase fino a 10 kW in due categorie:",
         "• la prima va da 3,28 kW fino a 5,74 kW",
         "• la seconda va da 6,56 kW fino a 9,84 kW",
-        "All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia (3,28 e 6,56 kWp).",
-        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all’interno della stessa categoria, senza aumentare il prezzo rispetto alla configurazione iniziale.",
-        "In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile nella stessa categoria.",
+        "All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia.",
+        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare.",
+        "In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile.",
         "Ogni sistema è completo di accumulo da 16 kWh, incluso nel progetto.",
-        "Ad esempio, nella prima fascia, il sistema completo (impianto + accumulo da 16 kWh) da 3,28 kWp ha un prezzo di 11.900 euro.",
-        "Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo (fino a 5,74 kWp)."
+        "Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo."
     ]
 
-    for p in paragrafi:
+    for p in testo_pagina1:
         story.append(Paragraph(p, body_style))
         story.append(Spacer(1, 10))
 
-    # Immagine
     if os.path.exists("TESSERE.jpg"):
         img = Image("TESSERE.jpg")
         img._restrictSize(4.5 * inch, 3.2 * inch)
@@ -116,28 +112,10 @@ def build_pdf(cliente, res, costo_impianto):
         story.append(img)
         story.append(Spacer(1, 15))
 
-    finali = [
-        "Questo è possibile perché oggi gli inverter monofase gestiscono range di ingresso molto ampi e la struttura tecnica dell’impianto non richiede variazioni proporzionali all’aumento dei moduli.",
-        "In altre parole, il costo non cresce in modo lineare rispetto alla potenza installata.",
-        "<b>Cosa significa, concretamente?</b>",
-        "Significa produrre più energia durante l’anno.",
-        "Significa aumentare l’autoconsumo reale grazie alla batteria da 16 kWh.",
-        "Significa avere una quantità maggiore di energia che può essere immessa in rete.",
-        "L’energia non autoconsumata viene valorizzata attraverso il Ritiro Dedicato.",
-        "Se condivisa tramite la Comunità Energetica, riceve un incentivo aggiuntivo sull’energia immessa.",
-        "A questo si aggiunge la detrazione fiscale del 50% in dieci anni.",
-        "Il risultato è un sistema che agisce su più livelli contemporaneamente.",
-        "Questa è la logica del Sistema di Rendita Energetica Attiva Next: non limitarsi a compensare la bolletta, ma creare una dinamica economica più ampia, capace di generare valore nel tempo."
-    ]
-
-    for p in finali:
-        story.append(Paragraph(p, body_style))
-        story.append(Spacer(1, 10))
-
     story.append(PageBreak())
 
     # =====================================================
-    # PAGINA 2 — TABELLE + ANALISI 10/20 ANNI
+    # PAGINA 2 — BENEFICI ANNUALI
     # =====================================================
 
     story.append(Paragraph(
@@ -146,26 +124,70 @@ def build_pdf(cliente, res, costo_impianto):
     ))
     story.append(Spacer(1, 15))
 
-    # Tabelle annuali (come prima)
-    # --- omesso qui per lunghezza spiegazione ---
-    # (rimangono identiche alla versione precedente con azzurro e verde)
+    # Tabella 1
+    data1 = [
+        ["Voce", "Valore (€ / anno)"],
+        ["Extra autoconsumo (Upgrade)", f"{res['vantaggio_extra_autoconsumo']:,.2f}"],
+        ["RID energia immessa", f"{res['rid_annuo']:,.2f}"],
+        ["CER prudente", f"{res['cer_prudente']:,.2f}"],
+        ["Totale benefici Upgrade + CER", f"{res['totale_benefici_annui']:,.2f}"],
+        ["Detrazione fiscale annua", f"{res['detrazione_annua']:,.2f}"],
+        ["Beneficio annuale totale – Rendita Energetica Attiva",
+         f"{res['beneficio_annuale_totale']:,.2f}"],
+    ]
 
-    # -----------------------------------------------------
-    # ANALISI DECENNALE E VENTENNALE
-    # -----------------------------------------------------
+    table1 = Table(data1, colWidths=[280, 170])
+    table1.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
+        ("BACKGROUND", (0, -1), (-1, -1), colors.lightblue),
+        ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
+    ]))
 
+    story.append(table1)
+    story.append(Spacer(1, 20))
+
+    # Tabella 2
+    data2 = [
+        ["Voce", "Valore (€ / anno)"],
+        ["Rendita Energetica Attiva", f"{res['beneficio_annuale_totale']:,.2f}"],
+        ["Risparmio in bolletta", f"{res['risparmio_bolletta']:,.2f}"],
+        ["Vantaggio complessivo totale annuo",
+         f"{res['risparmio_complessivo_annuo']:,.2f}"],
+    ]
+
+    table2 = Table(data2, colWidths=[280, 170])
+    table2.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
+        ("BACKGROUND", (0, 3), (-1, 3), colors.lightgreen),
+        ("FONTNAME", (0, 3), (-1, 3), "Helvetica-Bold"),
+    ]))
+
+    story.append(table2)
+    story.append(Spacer(1, 20))
+
+    story.append(Paragraph(
+        "Il cliente non sta spendendo: sta convertendo una bolletta futura in un investimento produttivo.",
+        body_style
+    ))
     story.append(Spacer(1, 25))
+
+    # =====================================================
+    # SEZIONE 10 / 20 ANNI
+    # =====================================================
+
     story.append(Paragraph(
         "Dettaglio benefici economici su base decennale e ventennale",
         styles["Heading1"]
     ))
     story.append(Spacer(1, 15))
 
-    beneficio_10 = res['beneficio_annuale_totale'] * 10
+    beneficio_10 = res['beneficio_10_anni']
     beneficio_20 = res['beneficio_20_anni']
 
-    vantaggio_10 = res['risparmio_complessivo_annuo'] * 10
-    vantaggio_20 = res['risparmio_complessivo_10'] * 2
+    vantaggio_10 = res['risparmio_complessivo_10']
+    vantaggio_20 = res['risparmio_complessivo_annuo'] * 20
 
     percentuale_beneficio = (beneficio_10 / costo_impianto) * 100
     roi_10 = ((vantaggio_10 - costo_impianto) / costo_impianto) * 100
