@@ -94,11 +94,11 @@ def build_pdf(cliente, res, costo_impianto):
         "Abbiamo suddiviso gli impianti monofase fino a 10 kW in due categorie:",
         "• la prima va da 3,28 kW fino a 5,74 kW",
         "• la seconda va da 6,56 kW fino a 9,84 kW",
-        "All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia.",
-        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare.",
-        "In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile.",
+        "All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia (3,28 e 6,56 kWp).",
+        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all'interno della stessa categoria,senza aumentare il prezzo rispetto alla configurazione iniziale.",
+        "In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile nella stessa categoria.",
         "Ogni sistema è completo di accumulo da 16 kWh, incluso nel progetto.",
-        "Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo."
+        "Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo fino a 5,74 kWp."
     ]
 
     for p in testo_pagina1:
