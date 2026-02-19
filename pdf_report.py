@@ -296,7 +296,7 @@ def build_pdf(cliente, res, costo_impianto):
     differenza_netto = vantaggio_10 - costo_impianto
 
     testo_chiusura = [
-        "CHIUSURA FINALE",
+        "VALUTAZIONE ECONOMICO/STRATEGICA COMPLESSIVA",
         "",
         f"Il grafico e i dati che precedono mostrano chiaramente che, nel corso di 10 anni, "
         f"il Vantaggio Complessivo Totale generato dal Sistema di Rendita Energetica Attiva "
