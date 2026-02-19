@@ -294,5 +294,44 @@ def build_pdf(cliente, res, costo_impianto):
         "• Il RID monetizza l’energia immessa.<br/>"
         "• La CER aggiunge un incentivo pluriennale sull’energia condivisa.<br/>"
         "• La detrazione fiscale accelera ulteriormente il rientro.<br/><br/>"
-        "Il cliente non sta “spende
+        "Il cliente non sta “spendendo”, ma sta convertendo una bolletta futura in un investimento produttivo.",
+        body_style
+    ))
 
+    story.append(PageBreak())
+
+    # =====================================================
+    # PAGINA 3 — GRAFICI + PROIEZIONI
+    # =====================================================
+
+    story.append(Paragraph("Proiezione nel Tempo e Rientro dell’Investimento", styles["Heading1"]))
+    story.append(Spacer(1, 15))
+
+    chart1 = make_payback_chart(costo_impianto, res["risparmio_complessivo_annuo"])
+    chart2 = make_benefits_chart(res["beneficio_10_anni"], res["beneficio_20_anni"])
+
+    story.append(Image(chart1, width=400, height=250))
+    story.append(Spacer(1, 18))
+    story.append(Image(chart2, width=350, height=250))
+    story.append(Spacer(1, 20))
+
+    testo_finale = (
+        f"Con questi numeri, il cliente ottiene:<br/><br/>"
+        f"<b>• Beneficio totale in 10 anni:</b> € {res['beneficio_10_anni']:,.2f}<br/>"
+        f"<b>• Beneficio totale in 20 anni:</b> € {res['beneficio_20_anni']:,.2f}<br/>"
+        f"<b>• Risparmio complessivo in 10 anni:</b> € {res['risparmio_complessivo_10']:,.2f}<br/><br/>"
+        f"In altre parole: non realizzare questo intervento significa rinunciare a valore futuro misurabile.<br/><br/>"
+        f"Il Sistema di Rendita Energetica Attiva Next trasforma l’energia in un vantaggio economico stabile, misurabile e duraturo."
+    )
+
+    story.append(Paragraph(testo_finale, body_style))
+    story.append(Spacer(1, 14))
+
+    story.append(Paragraph(
+        "<i>Report generato automaticamente – valori indicativi. NEXT S.r.l.</i>",
+        styles["Normal"]
+    ))
+
+    # BUILD
+    doc.build(story)
+    return filename
