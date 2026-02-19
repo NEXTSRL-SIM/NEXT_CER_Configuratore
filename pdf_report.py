@@ -86,18 +86,15 @@ def build_pdf(cliente, res, costo_impianto):
     story.append(Spacer(1, 20))
 
     testo_pagina1 = [
-    "Questa iniziativa nasce da un’idea molto semplice.",
-    "Quando si realizza un impianto fotovoltaico residenziale, normalmente si sceglie una potenza “sufficiente”.",
+    "Questa iniziativa nasce da un’idea molto semplice. Quando si realizza un impianto fotovoltaico residenziale, normalmente si sceglie una potenza “sufficiente”.",
     "Noi abbiamo scelto un approccio diverso.",
     "Attraverso questa promozione abbiamo deciso di proporre un sistema completo – comprensivo di accumulo da 16 kWh – e di sfruttare al massimo la superficie disponibile del tetto, senza aumentare il prezzo rispetto alla configurazione base.",
     "<b>Vediamo come funziona.</b>",
     "Abbiamo suddiviso gli impianti monofase fino a 10 kW in due categorie:",
     "• la prima va da 3,28 kW fino a 5,74 kW",
     "• la seconda va da 6,56 kW fino a 9,84 kW",
-    "All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia (3,28 e 6,56 kWp).",
-    "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all'interno della stessa categoria, <b>senza aumentare il prezzo rispetto alla configurazione iniziale</b>.",
-    "In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile nella stessa categoria.",
-    "Ogni sistema è completo di accumulo da 16 kWh, incluso nel progetto.",
+    "All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia (3,28 e 6,56 kWp). Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all'interno della stessa categoria, <b>senza aumentare il prezzo rispetto alla configurazione iniziale</b>.",
+    "In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile nella stessa categoria. Ogni sistema è completo di accumulo da 16 kWh, incluso nel progetto.",
     "Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo fino a 5,74 kWp.",
     "<b>Cosa significa, concretamente?</b>",
     "Significa produrre più energia durante l’anno.",
