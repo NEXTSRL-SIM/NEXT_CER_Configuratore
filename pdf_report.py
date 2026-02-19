@@ -40,7 +40,7 @@ def make_payback_chart(costo, beneficio_annuo):
 
 
 # ---------------------------------------------------------
-# GRAFICO BENEFICI
+# GRAFICO BENEFICI 10–20 ANNI
 # ---------------------------------------------------------
 def make_benefits_chart(b10, b20):
     plt.figure()
@@ -76,7 +76,7 @@ def build_pdf(cliente, res, costo_impianto):
     oggi = datetime.date.today().strftime("%d/%m/%Y")
 
     # =====================================================
-    # PAGINA 1
+    # PAGINA 1 — SISTEMA DI RENDITA ENERGETICA ATTIVA
     # =====================================================
 
     story.append(Paragraph("Sistema di Rendita Energetica Attiva Next", styles["Title"]))
@@ -93,7 +93,6 @@ def build_pdf(cliente, res, costo_impianto):
     story.append(Spacer(1, 20))
 
     # Testo prima parte (spezzato)
-
     story.append(Paragraph("Questa iniziativa nasce da un’idea molto semplice.", body_style))
     story.append(Spacer(1, 8))
 
@@ -107,7 +106,8 @@ def build_pdf(cliente, res, costo_impianto):
     story.append(Spacer(1, 12))
 
     story.append(Paragraph(
-        "Attraverso questa promozione abbiamo deciso di proporre un sistema completo – comprensivo di accumulo da 16 kWh – e di sfruttare al massimo la superficie disponibile del tetto, senza aumentare il prezzo rispetto alla configurazione base.",
+        "Attraverso questa promozione abbiamo deciso di proporre un sistema completo – comprensivo di accumulo da 16 kWh – "
+        "e di sfruttare al massimo la superficie disponibile del tetto, senza aumentare il prezzo rispetto alla configurazione base.",
         body_style
     ))
     story.append(Spacer(1, 12))
@@ -134,7 +134,8 @@ def build_pdf(cliente, res, costo_impianto):
     story.append(Spacer(1, 8))
 
     story.append(Paragraph(
-        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all’interno della stessa categoria, senza aumentare il prezzo rispetto alla configurazione iniziale.",
+        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare "
+        "rimanendo all’interno della stessa categoria, senza aumentare il prezzo rispetto alla configurazione iniziale.",
         body_style
     ))
     story.append(Spacer(1, 8))
@@ -161,38 +162,38 @@ def build_pdf(cliente, res, costo_impianto):
         "Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo (fino a 5,74 kWp).",
         body_style
     ))
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 14))
 
-    # Immagine proporzionale sicura
+    # Immagine proporzionale sicura (ritocca qui se la vuoi più piccola)
     if os.path.exists("TESSERE.jpg"):
         img = Image("TESSERE.jpg")
-        img._restrictSize(5 * inch, 4 * inch)
+        img._restrictSize(4.6 * inch, 3.4 * inch)  # <-- riduci/aumenta qui
         img.hAlign = 'CENTER'
         story.append(img)
-        story.append(Spacer(1, 20))
+        story.append(Spacer(1, 14))
 
     # Parte finale prima pagina
-
     story.append(Paragraph(
-        "Questo è possibile perché oggi gli inverter monofase gestiscono range di ingresso molto ampi e la struttura tecnica dell’impianto non richiede variazioni proporzionali all’aumento dei moduli.",
+        "Questo è possibile perché oggi gli inverter monofase gestiscono range di ingresso molto ampi e la struttura tecnica "
+        "dell’impianto non richiede variazioni proporzionali all’aumento dei moduli.",
         body_style
     ))
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 10))
 
     story.append(Paragraph(
         "In altre parole, il costo non cresce in modo lineare rispetto alla potenza installata.",
         body_style
     ))
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 10))
 
     story.append(Paragraph("<b>Cosa significa, concretamente?</b>", body_style))
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 10))
 
     story.append(Paragraph("Significa produrre più energia durante l’anno.", body_style))
     story.append(Spacer(1, 6))
 
     story.append(Paragraph(
-        "Significa aumentare l’autoconsumo reale grazie alla batteria da 16 kWh.",
+        "Significa aumentare l’autoconsumo reale grazie alla batteria da 16 kWh, che consente di utilizzare anche la sera l’energia prodotta di giorno.",
         body_style
     ))
     story.append(Spacer(1, 6))
@@ -201,35 +202,43 @@ def build_pdf(cliente, res, costo_impianto):
         "Significa avere una quantità maggiore di energia che può essere immessa in rete.",
         body_style
     ))
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 10))
 
     story.append(Paragraph(
         "L’energia non autoconsumata viene valorizzata attraverso il Ritiro Dedicato.",
         body_style
     ))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 6))
 
     story.append(Paragraph(
         "Se condivisa tramite la Comunità Energetica, riceve un incentivo aggiuntivo sull’energia immessa.",
         body_style
     ))
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 10))
 
     story.append(Paragraph(
         "A questo si aggiunge la detrazione fiscale del 50% in dieci anni.",
         body_style
     ))
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 10))
 
     story.append(Paragraph(
-        "Questa è la logica del Sistema di Rendita Energetica Attiva Next: creare una dinamica economica più ampia, capace di generare valore nel tempo.",
+        "Il risultato è un sistema che agisce su più livelli contemporaneamente: riduce la spesa energetica annua, aumenta l’autonomia "
+        "dalla rete, valorizza l’energia immessa, beneficia della Comunità Energetica, recupera parte dell’investimento tramite detrazione.",
+        body_style
+    ))
+    story.append(Spacer(1, 10))
+
+    story.append(Paragraph(
+        "Questa è la logica del Sistema di Rendita Energetica Attiva Next: non limitarsi a compensare la bolletta, ma creare una dinamica economica "
+        "più ampia, capace di generare valore nel tempo, una rendita energetica appunto.",
         body_style
     ))
 
     story.append(PageBreak())
 
     # =====================================================
-    # PAGINA 2 — TABELLE
+    # PAGINA 2 — DETTAGLIO BENEFICI + DUE TABELLE
     # =====================================================
 
     story.append(Paragraph(
@@ -238,6 +247,7 @@ def build_pdf(cliente, res, costo_impianto):
     ))
     story.append(Spacer(1, 15))
 
+    # Prima tabella
     data1 = [
         ["Voce", "Valore (€ / anno)"],
         ["Extra autoconsumo (Upgrade)", f"{res['vantaggio_extra_autoconsumo']:,.2f}"],
@@ -253,12 +263,13 @@ def build_pdf(cliente, res, costo_impianto):
         ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
         ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-        ("BACKGROUND", (0, -1), (-1, -1), colors.lightblue),
+        ("BACKGROUND", (0, -1), (-1, -1), colors.lightblue),  # riga evidenziata
     ]))
 
     story.append(table1)
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 18))
 
+    # Seconda tabella
     data2 = [
         ["Voce", "Valore (€ / anno)"],
         ["Rendita Energetica Attiva", f"{res['beneficio_annuale_totale']:,.2f}"],
@@ -274,7 +285,14 @@ def build_pdf(cliente, res, costo_impianto):
     ]))
 
     story.append(table2)
+    story.append(Spacer(1, 18))
 
-    doc.build(story)
-    return filename
+    # Testo descrittivo pagina 2 (come nel vecchio file, puoi modificarlo)
+    story.append(Paragraph(
+        "Come si vede, l’intervento genera valore su più livelli:<br/><br/>"
+        "• L’Upgrade NEXT aumenta l’autoconsumo e riduce la dipendenza dalla rete.<br/>"
+        "• Il RID monetizza l’energia immessa.<br/>"
+        "• La CER aggiunge un incentivo pluriennale sull’energia condivisa.<br/>"
+        "• La detrazione fiscale accelera ulteriormente il rientro.<br/><br/>"
+        "Il cliente non sta “spende
 
