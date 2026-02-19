@@ -90,12 +90,12 @@ def build_pdf(cliente, res, costo_impianto):
         "Quando si realizza un impianto fotovoltaico residenziale, normalmente si sceglie una potenza “sufficiente”.",
         "Noi abbiamo scelto un approccio diverso.",
         "Attraverso questa promozione abbiamo deciso di proporre un sistema completo – comprensivo di accumulo da 16 kWh – e di sfruttare al massimo la superficie disponibile del tetto, senza aumentare il prezzo rispetto alla configurazione base.",
-        "<b>Vediamo come funziona.</b>",
+        "</b>Vediamo come funziona.</b>",
         "Abbiamo suddiviso gli impianti monofase fino a 10 kW in due categorie:",
         "• la prima va da 3,28 kW fino a 5,74 kW",
         "• la seconda va da 6,56 kW fino a 9,84 kW",
         "All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia (3,28 e 6,56 kWp).",
-        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all'interno della stessa categoria,<b>senza aumentare il prezzo rispetto alla configurazione iniziale<b>.",
+        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all'interno della stessa categoria,</b>senza aumentare il prezzo rispetto alla configurazione iniziale</b>.",
         "In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile nella stessa categoria.",
         "Ogni sistema è completo di accumulo da 16 kWh, incluso nel progetto.",
         "Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo fino a 5,74 kWp.",
@@ -105,7 +105,7 @@ def build_pdf(cliente, res, costo_impianto):
         "Significa avere una quantità maggiore di energia che può essere immessa in rete.",
         "Ed è qui che l’impianto cambia natura. Fino a quel punto stiamo parlando di risparmio. Dal momento in cui l’energia prodotta supera quella consumata e viene immessa in rete, entriamo in una logica diversa.",
         "</b>1)	L’energia non autoconsumata viene valorizzata attraverso il Ritiro Dedicato.</b>",
-        "</b> condivisa tramite la Comunità Energetica, riceve un incentivo aggiuntivo sull’energia immessa.</b>",
+        "</b> Se condivisa tramite la Comunità Energetica, riceve un incentivo aggiuntivo sull’energia immessa.</b>",
         "In termini pratici, l’energia prodotta in eccesso genera un ritorno economico. E più l’impianto produce, maggiore diventa questa componente. A questo si aggiunge la detrazione fiscale del 50 in dieci anni. Il risultato è un sistema che agisce su più livelli contemporaneamente: riduce la spesa energetica annua, aumenta l’autonomia dalla rete, valorizza l’energia immessa, beneficia della Comunità Energetica, recupera parte dell’investimento tramite detrazione. Non si tratta semplicemente di installare un impianto più grande. Si tratta di utilizzare in modo più intelligente la stessa struttura tecnica per trasformare il tetto in una piattaforma di produzione energetica evoluta. Questa è la logica del Sistema di Rendita Energetica Attiva Next: non limitarsi a compensare la bolletta, ma creare una dinamica economica più ampia, capace di generare valore nel tempo, una rendita energetica appunto."
     ]
 
