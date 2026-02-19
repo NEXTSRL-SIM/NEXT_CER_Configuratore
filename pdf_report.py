@@ -118,7 +118,7 @@ def build_pdf(cliente, res, costo_impianto):
 
     # Inserimento immagine centrata
     if os.path.exists("TESSERE.jpg"):
-        img = Image("TESSERE.jpg", width=380, height=420)
+        img = Image("TESSERE.jpg", width=380)
         img.hAlign = 'CENTER'
         story.append(img)
         story.append(Spacer(1, 20))
