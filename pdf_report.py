@@ -25,27 +25,46 @@ def make_payback_chart(costo, beneficio_annuo):
     valori = [beneficio_annuo * a for a in anni]
 
     plt.figure()
-    plt.plot(anni, valori)
-    plt.axhline(costo)
+
+    # Linea rendimento cumulato (verde)
+    plt.plot(anni, valori, color="#4CAF50", linewidth=3)
+
+    # Linea investimento (light blue)
+    plt.axhline(costo, color="#5CB8E4", linestyle="--", linewidth=2)
 
     plt.title("Rientro dell'investimento (Payback)")
     plt.xlabel("Anni")
     plt.ylabel("Beneficio cumulato (€)")
 
+    plt.grid(alpha=0.2)
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+
     path = "payback.png"
-    plt.savefig(path)
+    plt.savefig(path, bbox_inches="tight")
     plt.close()
     return path
 
 
 def make_benefits_chart(b10, b20):
     plt.figure()
-    plt.bar(["10 anni", "20 anni"], [b10, b20])
+
+    # 10 anni verde pieno, 20 anni verde light
+    plt.bar(
+        ["10 anni", "20 anni"],
+        [b10, b20],
+        color=["#4CAF50", "#A5D6A7"]
+    )
+
     plt.title("Beneficio Totale nel Tempo")
     plt.ylabel("Euro (€)")
 
+    plt.grid(axis='y', alpha=0.2)
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+
     path = "benefici.png"
-    plt.savefig(path)
+    plt.savefig(path, bbox_inches="tight")
     plt.close()
     return path
 
