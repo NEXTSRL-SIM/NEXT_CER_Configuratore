@@ -118,7 +118,7 @@ def build_pdf(cliente, res, costo_impianto):
                 img._restrictSize(5.2 * inch, 3.6 * inch)
                 img.hAlign = 'CENTER'
                 story.append(img)
-                story.append(Spacer(1, 15))
+                story.append(Spacer(1, 30))
 
     story.append(PageBreak())
 
