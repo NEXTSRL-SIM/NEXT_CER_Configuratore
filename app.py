@@ -6,15 +6,15 @@ from pdf_report import build_pdf
 
 
 st.set_page_config(
-    page_title="Firmasubito Upgrade NEXT + CER",
+    page_title="Sistema di Rendita Energetica Attiva Next",
     layout="wide"
 )
 
-st.title("⚡ Firmasubito Upgrade NEXT + CER")
+st.title("⚡ Analisi Rendita Energetica Attiva Next")
 st.markdown(
     """
     Configuratore commerciale per simulare i vantaggi economici di:
-    - Upgrade NEXT
+    - Upgrade impianto NEXT
     - Comunità Energetica (CER) + RID
     - Extra autoconsumo (incremento %)
     - Detrazione fiscale (50% in 10 anni)
