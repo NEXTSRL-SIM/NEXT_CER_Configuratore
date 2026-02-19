@@ -305,13 +305,13 @@ def build_pdf(cliente, res, costo_impianto):
         f"In questo caso, è stato stimato un beneficio cumulato di € {vantaggio_10:,.2f} "
         f"a fronte di un investimento di € {costo_impianto:,.2f}.",
         f"Questo significa che non realizzare l’intervento non è \"non spendere\", "
-        f"ma piuttosto rinunciare a un valore economico potenziale netto di oltre "
-        f"€ {differenza_netto:,.2f} in 10 anni – risorse che rimangono nella bolletta "
+        f"<b>ma piuttosto rinunciare a un valore economico potenziale netto di oltre "
+        f"€ {differenza_netto:,.2f} in 10 anni</b> – risorse che rimangono nella bolletta "
         f"energetica o nei costi di acquisto dalla rete.",
         "",
-        "In un contesto di mercati energetici volatili e in generale in crescita, "
+        "<b>In un contesto di mercati energetici volatili e in generale in crescita, "
         "proteggersi dal rischio di aumento dei costi dell’energia elettrica non è "
-        "un’opzione secondaria, ma una leva di stabilità patrimoniale.",
+        "un’opzione secondaria, ma una leva di stabilità patrimoniale.</b>",
         "",
         "Secondo i dati storici, il prezzo medio dell’energia elettrica per la clientela "
         "domestica in Italia è cresciuto mediamente tra il 3% e il 5% all’anno negli "
@@ -343,7 +343,7 @@ def build_pdf(cliente, res, costo_impianto):
         "➡️ e può essere supportato da strutture di pagamento che ne rendono più semplice la realizzazione.",
         "",
         "Scegliere di attivare il Sistema di Rendita Energetica Attiva Next significa "
-        "trasformare oggi una spesa futura incerta in un flusso di valore definito "
+        "trasformare oggi una spesa futura incerta in un flusso di valore (rendita) definito "
         "e potenzialmente crescente nel tempo."
     ]
 
