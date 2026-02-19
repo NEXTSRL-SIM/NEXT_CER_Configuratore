@@ -115,7 +115,7 @@ def build_pdf(cliente, res, costo_impianto):
         if "5,74 kWp" in p:
             if os.path.exists("TESSERE.jpg"):
                 img = Image("TESSERE.jpg")
-                img._restrictSize(4.5 * inch, 3.2 * inch)
+                img._restrictSize(5.2 * inch, 3.6 * inch)
                 img.hAlign = 'CENTER'
                 story.append(img)
                 story.append(Spacer(1, 15))
