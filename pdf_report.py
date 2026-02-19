@@ -66,7 +66,6 @@ def build_pdf(cliente, res, costo_impianto):
 
     styles = getSampleStyleSheet()
 
-    # stile con interlinea leggermente migliorata
     body_style = ParagraphStyle(
         'BodyCustom',
         parent=styles['BodyText'],
@@ -80,10 +79,7 @@ def build_pdf(cliente, res, costo_impianto):
     # PAGINA 1
     # =====================================================
 
-    story.append(Paragraph(
-        "Sistema di Rendita Energetica Attiva Next",
-        styles["Title"]
-    ))
+    story.append(Paragraph("Sistema di Rendita Energetica Attiva Next", styles["Title"]))
     story.append(Spacer(1, 12))
 
     story.append(Paragraph(
@@ -96,35 +92,75 @@ def build_pdf(cliente, res, costo_impianto):
     story.append(Paragraph(f"<b>Data simulazione:</b> {oggi}", styles["Normal"]))
     story.append(Spacer(1, 20))
 
-    testo_parte1 = """
-    Questa iniziativa nasce da un’idea molto semplice.<br/><br/>
-    Quando si realizza un impianto fotovoltaico residenziale, normalmente si sceglie una potenza “sufficiente”.<br/><br/>
+    # Testo prima parte (spezzato)
 
-    Noi abbiamo scelto un approccio diverso.<br/><br/>
+    story.append(Paragraph("Questa iniziativa nasce da un’idea molto semplice.", body_style))
+    story.append(Spacer(1, 8))
 
-    Attraverso questa promozione abbiamo deciso di proporre un sistema completo – comprensivo di accumulo da 16 kWh – e di sfruttare al massimo la superficie disponibile del tetto, senza aumentare il prezzo rispetto alla configurazione base.<br/><br/>
+    story.append(Paragraph(
+        "Quando si realizza un impianto fotovoltaico residenziale, normalmente si sceglie una potenza “sufficiente”.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
 
-    <b>Vediamo come funziona.</b><br/><br/>
+    story.append(Paragraph("Noi abbiamo scelto un approccio diverso.", body_style))
+    story.append(Spacer(1, 12))
 
-    Abbiamo suddiviso gli impianti monofase fino a 10 kW in due categorie:<br/><br/>
+    story.append(Paragraph(
+        "Attraverso questa promozione abbiamo deciso di proporre un sistema completo – comprensivo di accumulo da 16 kWh – e di sfruttare al massimo la superficie disponibile del tetto, senza aumentare il prezzo rispetto alla configurazione base.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
 
-    • la prima va da 3,28 kW fino a 5,74 kW<br/>
-    • la seconda va da 6,56 kW fino a 9,84 kW<br/><br/>
+    story.append(Paragraph("<b>Vediamo come funziona.</b>", body_style))
+    story.append(Spacer(1, 12))
 
-    All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia (3,28 e 6,56 kWp).<br/><br/>
+    story.append(Paragraph(
+        "Abbiamo suddiviso gli impianti monofase fino a 10 kW in due categorie:",
+        body_style
+    ))
+    story.append(Spacer(1, 8))
 
-    Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all’interno della stessa categoria, senza aumentare il prezzo rispetto alla configurazione iniziale.<br/><br/>
+    story.append(Paragraph("• la prima va da 3,28 kW fino a 5,74 kW", body_style))
+    story.append(Spacer(1, 6))
 
-    In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile nella stessa categoria.<br/><br/>
+    story.append(Paragraph("• la seconda va da 6,56 kW fino a 9,84 kW", body_style))
+    story.append(Spacer(1, 12))
 
-    Ogni sistema è completo di accumulo da 16 kWh, incluso nel progetto.<br/><br/>
+    story.append(Paragraph(
+        "All’interno di ciascuna categoria esiste una potenza base, che è la più bassa della fascia (3,28 e 6,56 kWp).",
+        body_style
+    ))
+    story.append(Spacer(1, 8))
 
-    Ad esempio, nella prima fascia, il sistema completo (impianto + accumulo da 16 kWh) da 3,28 kWp ha un prezzo di 11.900 euro.<br/><br/>
+    story.append(Paragraph(
+        "Il prezzo viene determinato su quella potenza minima, ma installiamo tutta la potenza che il tetto può ospitare rimanendo all’interno della stessa categoria, senza aumentare il prezzo rispetto alla configurazione iniziale.",
+        body_style
+    ))
+    story.append(Spacer(1, 8))
 
-    Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo (fino a 5,74 kWp).
-    """
+    story.append(Paragraph(
+        "In altre parole, paghi l’impianto base della fascia, ma ottieni tutta la potenza tecnicamente installabile nella stessa categoria.",
+        body_style
+    ))
+    story.append(Spacer(1, 8))
 
-    story.append(Paragraph(testo_parte1, body_style))
+    story.append(Paragraph(
+        "Ogni sistema è completo di accumulo da 16 kWh, incluso nel progetto.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
+
+    story.append(Paragraph(
+        "Ad esempio, nella prima fascia, il sistema completo (impianto + accumulo da 16 kWh) da 3,28 kWp ha un prezzo di 11.900 euro.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
+
+    story.append(Paragraph(
+        "Se il tetto consente una potenza superiore rispetto ai 3,28 kW iniziali, questa viene installata senza maggiorazioni di prezzo (fino a 5,74 kWp).",
+        body_style
+    ))
     story.append(Spacer(1, 20))
 
     # Immagine proporzionale sicura
@@ -135,27 +171,61 @@ def build_pdf(cliente, res, costo_impianto):
         story.append(img)
         story.append(Spacer(1, 20))
 
-    testo_parte2 = """
-    Questo è possibile perché oggi gli inverter monofase gestiscono range di ingresso molto ampi e la struttura tecnica dell’impianto non richiede variazioni proporzionali all’aumento dei moduli.<br/><br/>
+    # Parte finale prima pagina
 
-    In altre parole, il costo non cresce in modo lineare rispetto alla potenza installata.<br/><br/>
+    story.append(Paragraph(
+        "Questo è possibile perché oggi gli inverter monofase gestiscono range di ingresso molto ampi e la struttura tecnica dell’impianto non richiede variazioni proporzionali all’aumento dei moduli.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
 
-    <b>Cosa significa, concretamente?</b><br/><br/>
+    story.append(Paragraph(
+        "In altre parole, il costo non cresce in modo lineare rispetto alla potenza installata.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
 
-    Significa produrre più energia durante l’anno.<br/>
-    Significa aumentare l’autoconsumo reale grazie alla batteria da 16 kWh.<br/>
-    Significa avere una quantità maggiore di energia che può essere immessa in rete.<br/><br/>
+    story.append(Paragraph("<b>Cosa significa, concretamente?</b>", body_style))
+    story.append(Spacer(1, 12))
 
-    L’energia non autoconsumata viene valorizzata attraverso il Ritiro Dedicato.<br/><br/>
+    story.append(Paragraph("Significa produrre più energia durante l’anno.", body_style))
+    story.append(Spacer(1, 6))
 
-    Se condivisa tramite la Comunità Energetica, riceve un incentivo aggiuntivo sull’energia immessa.<br/><br/>
+    story.append(Paragraph(
+        "Significa aumentare l’autoconsumo reale grazie alla batteria da 16 kWh.",
+        body_style
+    ))
+    story.append(Spacer(1, 6))
 
-    A questo si aggiunge la detrazione fiscale del 50% in dieci anni.<br/><br/>
+    story.append(Paragraph(
+        "Significa avere una quantità maggiore di energia che può essere immessa in rete.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
 
-    Questa è la logica del Sistema di Rendita Energetica Attiva Next: creare una dinamica economica più ampia, capace di generare valore nel tempo.
-    """
+    story.append(Paragraph(
+        "L’energia non autoconsumata viene valorizzata attraverso il Ritiro Dedicato.",
+        body_style
+    ))
+    story.append(Spacer(1, 8))
 
-    story.append(Paragraph(testo_parte2, body_style))
+    story.append(Paragraph(
+        "Se condivisa tramite la Comunità Energetica, riceve un incentivo aggiuntivo sull’energia immessa.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
+
+    story.append(Paragraph(
+        "A questo si aggiunge la detrazione fiscale del 50% in dieci anni.",
+        body_style
+    ))
+    story.append(Spacer(1, 12))
+
+    story.append(Paragraph(
+        "Questa è la logica del Sistema di Rendita Energetica Attiva Next: creare una dinamica economica più ampia, capace di generare valore nel tempo.",
+        body_style
+    ))
+
     story.append(PageBreak())
 
     # =====================================================
@@ -204,34 +274,7 @@ def build_pdf(cliente, res, costo_impianto):
     ]))
 
     story.append(table2)
-    story.append(PageBreak())
-
-    # =====================================================
-    # PAGINA 3 — GRAFICI
-    # =====================================================
-
-    story.append(Paragraph(
-        "Proiezione nel Tempo e Rientro dell’Investimento",
-        styles["Heading1"]
-    ))
-    story.append(Spacer(1, 15))
-
-    chart1 = make_payback_chart(costo_impianto, res["risparmio_complessivo_annuo"])
-    chart2 = make_benefits_chart(res["beneficio_10_anni"], res["beneficio_20_anni"])
-
-    story.append(Image(chart1, width=400, height=250))
-    story.append(Spacer(1, 20))
-    story.append(Image(chart2, width=350, height=250))
-    story.append(Spacer(1, 25))
-
-    story.append(Paragraph(
-        f"<b>Beneficio totale in 10 anni:</b> € {res['beneficio_10_anni']:,.2f}<br/>"
-        f"<b>Beneficio totale in 20 anni:</b> € {res['beneficio_20_anni']:,.2f}<br/>"
-        f"<b>Risparmio complessivo in 10 anni:</b> € {res['risparmio_complessivo_10']:,.2f}",
-        body_style
-    ))
 
     doc.build(story)
-
     return filename
 
