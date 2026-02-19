@@ -269,7 +269,7 @@ def build_pdf(cliente, res, costo_impianto):
 
     story.append(Paragraph(
         f"<b>Resa sul capitale investito in 10 anni: {roi_10:.1f}%</b>",
-        f"<b>Resa annua sul capitale investito: {roi_10:.1f}/10%</b>",
+        f"<b>Resa annua sul capitale investito: {(roi_10 / 10):.1f}%</b>",
         body_style
     ))
 
