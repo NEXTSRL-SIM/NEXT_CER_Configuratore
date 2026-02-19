@@ -20,52 +20,64 @@ import os
 # ---------------------------------------------------------
 # GRAFICI
 # ---------------------------------------------------------
+import os
+import datetime
+import matplotlib.pyplot as plt
+
 def make_payback_chart(costo, beneficio_annuo):
     anni = list(range(0, 21))
     valori = [beneficio_annuo * a for a in anni]
 
-    plt.figure()
+    fig, ax = plt.subplots()
 
     # Linea rendimento cumulato (verde)
-    plt.plot(anni, valori, color="#4CAF50", linewidth=3)
+    ax.plot(anni, valori, color="#4CAF50", linewidth=3)
 
     # Linea investimento (light blue)
-    plt.axhline(costo, color="#5CB8E4", linestyle="--", linewidth=2)
+    ax.axhline(costo, color="#5CB8E4", linestyle="--", linewidth=2)
 
-    plt.title("Rientro dell'investimento (Payback)")
-    plt.xlabel("Anni")
-    plt.ylabel("Beneficio cumulato (€)")
+    ax.set_title("Rientro dell'investimento (Payback)")
+    ax.set_xlabel("Anni")
+    ax.set_ylabel("Beneficio cumulato (€)")
 
-    plt.grid(alpha=0.2)
-    plt.gca().spines['top'].set_visible(False)
-    plt.gca().spines['right'].set_visible(False)
+    ax.grid(alpha=0.2)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
-    path = "payback.png"
-    plt.savefig(path, bbox_inches="tight")
-    plt.close()
+    # DEBUG: timestamp dentro il grafico (poi lo togli)
+    stamp = datetime.datetime.now().strftime("%H:%M:%S")
+    ax.text(0.99, 0.01, stamp, transform=ax.transAxes, ha="right", va="bottom", fontsize=8, alpha=0.6)
+
+    base_dir = os.path.dirname(os.path.abspath(__file__)) if "__file__" in globals() else os.getcwd()
+    path = os.path.join(base_dir, f"payback_{int(datetime.datetime.now().timestamp())}.png")
+
+    fig.savefig(path, bbox_inches="tight", dpi=150)
+    plt.close(fig)
     return path
 
 
 def make_benefits_chart(b10, b20):
-    plt.figure()
+    fig, ax = plt.subplots()
 
     # 10 anni verde pieno, 20 anni verde light
-    plt.bar(
-        ["10 anni", "20 anni"],
-        [b10, b20],
-        color=["#4CAF50", "#A5D6A7"]
-    )
+    ax.bar(["10 anni", "20 anni"], [b10, b20], color=["#4CAF50", "#A5D6A7"])
 
-    plt.title("Beneficio Totale nel Tempo")
-    plt.ylabel("Euro (€)")
+    ax.set_title("Beneficio Totale nel Tempo")
+    ax.set_ylabel("Euro (€)")
 
-    plt.grid(axis='y', alpha=0.2)
-    plt.gca().spines['top'].set_visible(False)
-    plt.gca().spines['right'].set_visible(False)
+    ax.grid(axis='y', alpha=0.2)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
-    path = "benefici.png"
-    plt.savefig(path, bbox_inches="tight")
-    plt.close()
+    # DEBUG: timestamp dentro il grafico (poi lo togli)
+    stamp = datetime.datetime.now().strftime("%H:%M:%S")
+    ax.text(0.99, 0.01, stamp, transform=ax.transAxes, ha="right", va="bottom", fontsize=8, alpha=0.6)
+
+    base_dir = os.path.dirname(os.path.abspath(__file__)) if "__file__" in globals() else os.getcwd()
+    path = os.path.join(base_dir, f"benefici_{int(datetime.datetime.now().timestamp())}.png")
+
+    fig.savefig(path, bbox_inches="tight", dpi=150)
+    plt.close(fig)
     return path
 
 
