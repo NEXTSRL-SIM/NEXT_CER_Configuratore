@@ -363,100 +363,133 @@ def build_pdf(
 
     story.append(PageBreak())
 
-    # =====================================================
-    # PAGINA 3 — GRAFICI
-    # =====================================================
+  # =====================================================
+# PAGINA 3 — GRAFICI
+# =====================================================
 
+story.append(Paragraph("Proiezione nel Tempo e Rientro dell’Investimento", styles["Heading1"]))
+story.append(Spacer(1, 15))
 
-    story.append(Paragraph("Proiezione nel Tempo e Rientro dell’Investimento", styles["Heading1"]))
-    story.append(Spacer(1, 15))
+# =============================
+# Definizione benefici
+# =============================
 
-    beneficio_primi_10 = res["risparmio_complessivo_annuo"]
+beneficio_primi_10 = res["risparmio_complessivo_annuo"]
 
-    beneficio_dal_11 = (
+beneficio_dal_11 = (
     res["beneficio_annuale_totale"] - res["detrazione_annua"]
-    ) + res["risparmio_bolletta"]
+) + res["risparmio_bolletta"]
 
-    chart1 = make_payback_chart(
+# =============================
+# Calcolo payback dinamico
+# =============================
+
+cumulato = 0
+payback_anni = 0
+
+for anno in range(1, 31):
+    if anno <= 10:
+        cumulato += beneficio_primi_10
+    else:
+        cumulato += beneficio_dal_11
+
+    if cumulato >= costo_impianto:
+        payback_anni = anno
+        break
+
+# =============================
+# Testo descrittivo payback
+# =============================
+
+testo_payback = (
+    "Il grafico seguente rappresenta l’andamento cumulato del beneficio economico "
+    "generato dall’impianto nel tempo, confrontato con l’investimento iniziale sostenuto. "
+    "La curva evidenzia il punto di rientro dell’investimento (payback), ossia "
+    "il momento in cui i benefici economici cumulati eguagliano il capitale iniziale."
+)
+
+story.append(Paragraph(testo_payback, body_style))
+story.append(Spacer(1, 10))
+
+story.append(Paragraph(
+    f"<b>L’investimento si ripaga in circa {payback_anni} anni.</b>",
+    body_style
+))
+story.append(Spacer(1, 20))
+
+# =============================
+# Grafici
+# =============================
+
+chart1 = make_payback_chart(
     costo_impianto,
     beneficio_primi_10,
     beneficio_dal_11
-    )
-    chart2 = make_benefits_chart(res["beneficio_10_anni"], res["beneficio_20_anni"])
+)
 
-    story.append(Image(chart1, width=400, height=250))
-    story.append(Spacer(1, 20))
-    story.append(Image(chart2, width=350, height=250))
+chart2 = make_benefits_chart(
+    res["beneficio_10_anni"],
+    res["beneficio_20_anni"]
+)
 
+story.append(Image(chart1, width=400, height=250))
+story.append(Spacer(1, 20))
+story.append(Image(chart2, width=350, height=250))
 
+story.append(Spacer(1, 25))
 
-    story.append(Spacer(1, 25))
+# =============================
+# Valutazione finale
+# =============================
 
-    differenza_netto = vantaggio_10 - costo_impianto
+vantaggio_10 = res["risparmio_complessivo_10"]
+differenza_netto = vantaggio_10 - costo_impianto
 
-    story.append(Paragraph("Valutazione Economico/Strategica Complessiva", styles["Heading1"]))
-    story.append(Spacer(1, 15))
+story.append(PageBreak())
 
-    testo_chiusura = [
-        "VALUTAZIONE ECONOMICO/STRATEGICA COMPLESSIVA",
-        "",
-        f"Il grafico e i dati che precedono mostrano chiaramente che, nel corso di 10 anni, "
-        f"il Vantaggio Complessivo Totale generato dal Sistema di Rendita Energetica Attiva "
-        f"supera ampliamente il capitale iniziale investito.",
-        "",
-        f"In questo caso, è stato stimato un beneficio cumulato di € {vantaggio_10:,.2f} "
-        f"a fronte di un investimento di € {costo_impianto:,.2f}.",
-        f"Questo significa che non realizzare l’intervento non è \"non spendere\", "
-        f"<b>ma piuttosto rinunciare a un valore economico potenziale netto di oltre "
-        f"€ {differenza_netto:,.2f} in 10 anni</b> – risorse che rimangono nella bolletta "
-        f"energetica o nei costi di acquisto dalla rete.",
-        "",
-        "<b>In un contesto di mercati energetici volatili e in generale in crescita, "
-        "proteggersi dal rischio di aumento dei costi dell’energia elettrica non è "
-        "un’opzione secondaria, ma una leva di stabilità patrimoniale.</b>",
-        "",
-        "Secondo i dati storici, il prezzo medio dell’energia elettrica per la clientela "
-        "domestica in Italia è cresciuto mediamente tra il 3% e il 5% all’anno negli "
-        "ultimi 20 anni.",
-        "Negli ultimi cicli di mercato questa dinamica si è ancor più accentuata, con "
-        "impatti significativi sulle famiglie e sui budget familiari.",
-        "(Nota: nella presente simulazione non è stato considerato alcun incremento "
-        "ulteriore dei prezzi dell’energia nei prossimi anni. Qualora tali tendenze "
-        "di aumento dovessero persistere o intensificarsi, il beneficio economico "
-        "cumulato dell’intervento risulterebbe ancora maggiore.)",
-        "",
-        "In altre parole, ogni anno che passa senza realizzare l’intervento equivale a:",
-        "• perdere una opportunità di ridurre la spesa energetica;",
-        "• rinunciare a una rendita energetica positiva;",
-        "• esporsi ulteriormente all’aumento dei costi dell’energia.",
-        "",
-        "Questa dinamica si traduce in un costo opportunità concreto, che cresce "
-        "con l’aumento dei prezzi e con l’allungamento dell’orizzonte temporale.",
-        "",
-        "In più, è possibile strutturare l’investimento con soluzioni di finanziamento "
-        "dedicate, che consentono di distribuire la spesa nel tempo, spesso in modo "
-        "sostenibile rispetto al flusso economico annuo generato dalla Rendita "
-        "Energetica Attiva.",
-        "",
-        "In sintesi:",
-        "➡️ l’impianto non è soltanto un sistema per abbattere la bolletta;",
-        "➡️ è uno strumento che genera valore economico nel tempo;",
-        "➡️ ti protegge dall’aumento dei prezzi dell’energia;",
-        "➡️ e può essere supportato da strutture di pagamento che ne rendono più semplice la realizzazione.",
-        "",
-        "Scegliere di attivare il Sistema di Rendita Energetica Attiva Next significa "
-        "trasformare oggi una spesa futura incerta in un flusso di valore (rendita) definito "
-        "e potenzialmente crescente nel tempo.",
-        ""
-        "NEXT SRL - Report sinulazione",
-        "valori indicativi",
-        ""
-        f"Data {oggi}"
-    ]
+story.append(Paragraph("Valutazione Economico/Strategica Complessiva", styles["Heading1"]))
+story.append(Spacer(1, 15))
 
-    for p in testo_chiusura:
-        story.append(Paragraph(p, body_style))
-        story.append(Spacer(1, 8))
+testo_chiusura = [
+    f"Il grafico e i dati che precedono mostrano chiaramente che, nel corso di 10 anni, "
+    f"il Risparmio Complessivo Totale generato dal Sistema di Rendita Energetica Attiva "
+    f"supera ampiamente il capitale iniziale investito.",
 
-    doc.build(story)
-    return filename
+    "",
+    f"In questo caso, è stato stimato un beneficio cumulato di € {vantaggio_10:,.2f} "
+    f"a fronte di un investimento di € {costo_impianto:,.2f}.",
+
+    f"<b>Non realizzare l’intervento significa rinunciare a un valore economico potenziale "
+    f"netto di oltre € {differenza_netto:,.2f} in 10 anni.</b>",
+
+    "",
+    "In un contesto di mercati energetici volatili e strutturalmente in crescita, "
+    "proteggersi dal rischio di aumento dei costi dell’energia elettrica rappresenta "
+    "una leva di stabilità economica nel medio-lungo periodo.",
+
+    "",
+    "La presente simulazione non considera alcun incremento futuro dei prezzi dell’energia. "
+    "Qualora tali aumenti dovessero verificarsi, il beneficio economico cumulato "
+    "risulterebbe ulteriormente maggiore.",
+
+    "",
+    "In sintesi:",
+    "• l’impianto non è soltanto uno strumento di riduzione della bolletta;",
+    "• genera un flusso economico positivo nel tempo;",
+    "• riduce l’esposizione al rischio energetico;",
+    "• può essere supportato da soluzioni finanziarie dedicate.",
+
+    "",
+    "Scegliere di attivare il Sistema di Rendita Energetica Attiva Next significa "
+    "trasformare una spesa energetica futura incerta in un flusso di valore definito "
+    "e progressivamente crescente nel tempo.",
+
+    "",
+    "NEXT SRL - Report simulazione",
+    "Valori indicativi",
+    f"Data {oggi}"
+]
+
+for p in testo_chiusura:
+    story.append(Paragraph(p, body_style))
+    story.append(Spacer(1, 8))
