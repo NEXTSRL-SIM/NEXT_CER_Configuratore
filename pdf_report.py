@@ -495,15 +495,10 @@ def build_pdf(
 
     story.append(img_formula)
 
-    story.append(img_formula)
 
     story.append(Spacer(1, 20))
 
 
-    story.append(Paragraph(
-        f"<b>IRR (10 anni) = {res['irr_10']:.2f}% annuo</b>",
-        styles["Heading1"]
-    ))
     story.append(Spacer(1, 20))
     story.append(PageBreak())
 
