@@ -481,7 +481,13 @@ def build_pdf(
         incremento,
     )
 
-    story.append(Image(formula_path, width=450, height=90))
+    img_formula = Image(formula_path)
+    img_formula.drawWidth = 450
+    img_formula.drawHeight = img_formula.drawHeight * (450 / img_formula.drawWidth)
+    img_formula.hAlign = "CENTER"
+
+    story.append(img_formula)
+
     story.append(Spacer(1, 20))
 
 
