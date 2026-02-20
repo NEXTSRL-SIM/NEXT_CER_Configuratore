@@ -205,26 +205,29 @@ def build_pdf(
 
     if res["percentuale_clipping"] > 0:
         testo_simulazione.append(
-            f"Ottimizzazione inverter (clipping stimato): {res['percentuale_clipping']*100:.1f}%"
+            f"Ottimizzazione inverter (clipping stimato): <b>{res['percentuale_clipping']*100:.1f}%</b>"
         )
 
     testo_simulazione += [
-    f"Produzione effettiva stimata: {res['produzione_bonus']:,.0f} kWh",
+    f"Produzione effettiva stimata: <b>{res['produzione_bonus']:,.0f} kWh</b>",
     "",
-    "Parametri economici adottati nella simulazione:",
-    f"Prezzo energia evitata: {prezzo_energia:.3f} €/kWh",
-    f"Ritiro Dedicato (RID): {rid_eur_kwh:.3f} €/kWh",
-    f"Incentivo Comunità Energetica (CER): {cer_eur_kwh:.3f} €/kWh",
-    f"Quota energia condivisa stimata: {quota_condivisa*100:.0f}%",
-    f"Costo impianto considerato: € {costo_impianto:,.2f}",
+    "<b>Parametri economici adottati nella simulazione:</b>",
+    f"Prezzo energia evitata: <b>{prezzo_energia:.3f} €/kWh</b>",
+    f"Ritiro Dedicato (RID): <b>{rid_eur_kwh:.3f} €/kWh</b>",
+    f"Incentivo Comunità Energetica (CER): <b>{cer_eur_kwh:.3f} €/kWh</b>",
+    f"Quota energia condivisa stimata: <b>{quota_condivisa*100:.0f}%</b>",
+    f"Costo impianto considerato: € <b>{costo_impianto:,.2f}</b>",
     "",
-    "Ipotesi di copertura dei consumi:",
-    f"Copertura con impianto base: {autoc_base_perc*100:.1f}%",
-    f"Copertura con impianto upgrade: {autoc_bonus_perc*100:.1f}%",
+    "<b>Ipotesi di copertura dei consumi:</b>",
+    f"Copertura con impianto base: <b>{autoc_base_perc*100:.1f}%</b>",
+    f"Copertura con impianto upgrade: <b>{autoc_bonus_perc*100:.1f}%</b>",
     "",
     "Le percentuali di copertura rappresentano una stima prudenziale "
     "della quota di fabbisogno energetico annuo coperta dall’impianto "
-    "fotovoltaico in presenza di accumulo da 16 kWh."
+    "fotovoltaico in presenza di accumulo da 16 kWh.",
+    "",
+    "",
+    ""
 ]
 
     for riga in testo_simulazione:
