@@ -417,7 +417,7 @@ def build_pdf(
     story.append(Spacer(1, 10))
 
     story.append(Paragraph(
-        f"<b>L’investimento si ripaga in circa {payback_anni} anni.</b>",
+        f"<b>L’investimento si ripaga in circa {payback_anni:.1f} anni.</b>",
     body_style
     ))
     story.append(Spacer(1, 20))
