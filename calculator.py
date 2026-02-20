@@ -72,6 +72,43 @@ def simulate(
 # CALCOLO BENEFICI (COERENTE CON EXCEL)
 # ==========================================================
 
+def apply_clipping(bonus_kwp, resa_kwh_kwp, consumo_kwh):
+    """
+    Applica riduzione produzione per clipping inverter 6 kW
+    solo per impianti 8.2 - 9.02 - 9.84 kWp
+    e solo se consumo <= 9000 kWh
+    """
+
+    produzione_teorica = bonus_kwp * resa_kwh_kwp
+    riduzione = 0.0
+
+    # Clipping solo se consumo <= 9000
+    if consumo_kwh <= 9000:
+
+        kwp = round(bonus_kwp, 2)
+
+        # Identificazione zona tramite resa
+        if resa_kwh_kwp <= 1250:
+            zona = "nord"
+        elif resa_kwh_kwp <= 1400:
+            zona = "centro"
+        else:
+            zona = "sud"
+
+        # Tabelle riduzione
+        clipping_table = {
+            8.2:   {"nord": 0.015, "centro": 0.019, "sud": 0.023},
+            9.02:  {"nord": 0.029, "centro": 0.034, "sud": 0.041},
+            9.84:  {"nord": 0.045, "centro": 0.052, "sud": 0.059},
+        }
+
+        if kwp in clipping_table:
+            riduzione = clipping_table[kwp][zona]
+
+    produzione_effettiva = produzione_teorica * (1 - riduzione)
+
+    return produzione_teorica, riduzione, produzione_effettiva
+
 def compute_benefits(
     consumo_kwh: float,
     base_kwp: float,
@@ -88,8 +125,11 @@ def compute_benefits(
 
     # Produzioni
     produzione_base = base_kwp * resa_kwh_kwp
-    produzione_bonus = bonus_kwp * resa_kwh_kwp
-
+    produzione_bonus_teorica, percentuale_clipping, produzione_bonus = apply_clipping(
+    bonus_kwp,
+    resa_kwh_kwp,
+    consumo_kwh
+)
     # Autoconsumi teorici
     autoc_base_teorico = consumo_kwh * autoc_base_perc
     autoc_bonus_teorico = consumo_kwh * autoc_bonus_perc
@@ -167,4 +207,8 @@ def compute_benefits(
         "risparmio_bolletta": risparmio_bolletta,
         "risparmio_complessivo_annuo": risparmio_complessivo_annuo,
         "risparmio_complessivo_10": risparmio_complessivo_10,
-    }
+    
+        "produzione_bonus_teorica": produzione_bonus_teorica,
+        "percentuale_clipping": percentuale_clipping,
+        "produzione_bonus_post_clipping": produzione_bonus,
+        }
