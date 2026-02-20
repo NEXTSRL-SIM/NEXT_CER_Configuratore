@@ -102,28 +102,89 @@ def make_benefits_chart(b10, b20):
 # GENERAZIONE FORMULA IRR COME IMMAGINE
 # =====================================================
 
+import numpy as np
+
 def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
 
-    fig, ax = plt.subplots(figsize=(10, 2))
+    fig, ax = plt.subplots(figsize=(10, 5.5))
     ax.axis("off")
 
     costo = round(costo_impianto, 2)
     flusso = round(flusso_annuo, 2)
-    g = round(incremento, 4)
+    g = incremento
 
-    formula = (
+    # -----------------------------
+    # Calcolo flussi 10 anni
+    # -----------------------------
+    flussi = [-costo]
+    for t in range(1, 11):
+        flussi.append(flusso * ((1 + g) ** (t - 1)))
+
+    irr = np.irr(flussi)
+    irr_percent = round(irr * 100, 2)
+
+    # -----------------------------
+    # Formula Generica
+    # -----------------------------
+    formula_generica = (
+        r"$0 = -I + \sum_{t=1}^{n} \frac{CF_t}{(1 + r)^t}$"
+    )
+
+    descrizione = (
+        "Dove:\n"
+        "I = investimento iniziale\n"
+        "CFₜ = flusso di cassa al tempo t\n"
+        "r = tasso interno di rendimento (IRR)\n"
+        "n = durata dell'investimento (10 anni)"
+    )
+
+    # -----------------------------
+    # Formula Applicata
+    # -----------------------------
+    formula_applicata = (
         f"$0 = -{costo} + "
         f"\\sum_{{t=1}}^{{10}} "
-        f"\\frac{{{flusso}(1 + {g})^{{t-1}}}}{{(1 + r)^t}}$"
+        f"\\frac{{{round(flusso,2)}(1 + {round(g,4)})^{{t-1}}}}{{(1 + r)^t}}$"
+    )
+
+    definizione_irr = (
+        "L’IRR (Internal Rate of Return) rappresenta il tasso annuo composto "
+        "che rende nullo il valore attuale netto dell’investimento, "
+        "tenendo conto dei flussi di cassa generati nel tempo."
+    )
+
+    # -----------------------------
+    # Scrittura su immagine
+    # -----------------------------
+    ax.text(0.5, 0.92, formula_generica, fontsize=18, ha="center")
+    ax.text(0.1, 0.74, descrizione, fontsize=12, va="top")
+
+    ax.text(
+        0.5,
+        0.56,
+        "Pertanto, nel caso oggetto della presente simulazione:",
+        fontsize=13,
+        ha="center"
+    )
+
+    ax.text(0.5, 0.42, formula_applicata, fontsize=18, ha="center")
+
+    ax.text(
+        0.5,
+        0.25,
+        f"IRR a 10 anni = {irr_percent}%",
+        fontsize=22,
+        ha="center",
+        fontweight="bold"
     )
 
     ax.text(
         0.5,
-        0.5,
-        formula,
-        fontsize=16,
+        0.10,
+        definizione_irr,
+        fontsize=11,
         ha="center",
-        va="center"
+        wrap=True
     )
 
     file_path = "formula_irr.png"
@@ -131,6 +192,7 @@ def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
     plt.close(fig)
 
     return file_path
+
 
 
 
