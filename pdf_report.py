@@ -313,10 +313,7 @@ def build_pdf(
 
     vantaggio_10 = res['risparmio_complessivo_10']
 
-    secondo_decennio = (res["beneficio_annuale_totale"] - res["detrazione_annua"]) * 10 \
-                   + res["risparmio_bolletta"] * 10
-
-    vantaggio_20 = vantaggio_10 + secondo_decennio
+    vantaggio_20 = res["risparmio_complessivo_20"]
 
     percentuale_beneficio = (beneficio_10 / costo_impianto) * 100
     roi_10 = ((vantaggio_10 - costo_impianto) / costo_impianto) * 100
@@ -363,6 +360,46 @@ def build_pdf(
         body_style
     ))
 
+    story.append(Paragraph("Tasso Interno di Rendimento (IRR)", styles["Heading1"]))
+    story.append(Spacer(1, 20))
+
+    story.append(Paragraph(
+        "L’IRR rappresenta il rendimento finanziario annuo composto dell’investimento, "
+        "tenendo conto dei flussi di cassa generati nel tempo.",
+        styles["Normal"]
+    ))
+    story.append(Spacer(1, 15))
+
+    story.append(Paragraph(
+        "Formula generale:",
+            styles["Heading2"]
+    ))
+    story.append(Spacer(1, 10))
+
+    story.append(Paragraph(
+        "0 = -I + Σ [ CF₁ · (1 + g)ᵗ⁻¹ / (1 + r)ᵗ ]",
+        styles["Normal"]
+    ))
+    story.append(Spacer(1, 15))
+
+    story.append(Paragraph(
+        f"Applicazione con i valori della simulazione:",
+        styles["Heading2"]
+    ))
+    story.append(Spacer(1, 10))
+
+    story.append(Paragraph(
+        f"0 = -{costo_impianto:,.0f} + Σ [ {res['risparmio_complessivo_annuo']:,.0f} · "
+        f"(1 + {incremento_prezzo_annuo:.2%})ᵗ⁻¹ / (1 + r)ᵗ ]   per t = 1 … 10",
+        styles["Normal"]
+    ))
+    story.append(Spacer(1, 20))
+
+    story.append(Paragraph(
+        f"<b>IRR (10 anni) = {res['irr_10']:.2f}% annuo</b>",
+        styles["Heading1"]
+    ))
+    story.append(Spacer(1, 20))
     story.append(PageBreak())
 
     # =====================================================
