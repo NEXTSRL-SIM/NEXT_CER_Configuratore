@@ -113,7 +113,7 @@ def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
         + r" + \sum_{t=1}^{10} \frac{"
         + f"{flusso_annuo:,.0f}"
         + r"(1 + "
-        + f"{incremento:.2%}"
+        + f"{incremento*100:.2%}"
         + r")^{t-1}}{(1 + r)^t}$"
     )
 
