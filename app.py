@@ -1,7 +1,7 @@
 # app.py
 import streamlit as st
 
-from calculator import compute_benefits, autoconsumo_bonus_from_kwp
+from calculator import compute_benefits, quota_copertura_from_kwp
 from pdf_report import build_pdf
 
 
