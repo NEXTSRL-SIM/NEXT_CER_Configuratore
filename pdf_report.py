@@ -148,9 +148,7 @@ def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
     )
 
     definizione_irr = (
-        "L’IRR (Internal Rate of Return) rappresenta il tasso annuo composto "
-        "che rende nullo il valore attuale netto dell’investimento, "
-        "tenendo conto dei flussi di cassa generati nel tempo."
+        " "
     )
 
     # -----------------------------
@@ -457,8 +455,7 @@ def build_pdf(
     story.append(Spacer(1, 10))
 
     story.append(Paragraph(
-        f"<b>Resa sul capitale investito in 10 anni: {roi_10:.1f}%</b><br/>"
-        f"<b>Resa annua sul capitale investito: {(roi_10 / 10):.1f}%</b>",
+        f"<b>Resa sul capitale investito in 10 anni: {roi_10:.1f}%</b><br/>",
         body_style
     ))
 
