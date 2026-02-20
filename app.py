@@ -16,13 +16,18 @@ st.markdown(
     Configuratore commerciale per simulare i vantaggi economici di:
     - Upgrade impianto NEXT
     - Comunità Energetica (CER) + RID
-    - Extra autoconsumo (incremento %)
+    - Extra autoconsumo
+    - Incremento annuo costo energia
     - Detrazione fiscale (50% in 10 anni)
-    - Risparmio in bolletta (autoconsumo diretto)
+    - Risparmio in bolletta
     """
 )
 
 st.divider()
+
+# =========================================================
+# DATI CLIENTE
+# =========================================================
 
 st.header("📌 Dati Cliente e Impianto")
 
@@ -47,26 +52,73 @@ with col3:
 
 st.divider()
 
+# =========================================================
+# PARAMETRI ECONOMICI
+# =========================================================
+
 st.header("⚙️ Parametri Economici")
 
 col4, col5, col6 = st.columns(3)
 
 with col4:
-    prezzo_energia = st.number_input("Prezzo energia evitata €/kWh", value=0.30, step=0.01)
-    rid = st.number_input("RID €/kWh", value=0.137, step=0.001)
+    prezzo_energia = st.number_input(
+        "Prezzo energia evitata €/kWh",
+        value=0.30,
+        step=0.01
+    )
+
+    incremento = st.number_input(
+        "Incremento annuo costo energia (%)",
+        min_value=0.0,
+        max_value=15.0,
+        value=3.0,
+        step=0.5
+    ) / 100
+
+    rid = st.number_input(
+        "RID €/kWh",
+        value=0.137,
+        step=0.001
+    )
 
 with col5:
-    cer = st.number_input("CER €/kWh", value=0.06, step=0.005)
-    quota = st.number_input("Quota energia condivisa (%)", value=50, step=5) / 100
+    cer = st.number_input(
+        "CER €/kWh",
+        value=0.06,
+        step=0.005
+    )
+
+    quota = st.number_input(
+        "Quota energia condivisa (%)",
+        value=50,
+        step=5
+    ) / 100
 
 with col6:
-    resa = st.number_input("Resa zona (kWh/kWp)", value=1200, step=50)
-    autoc_base_perc = st.number_input("Autoconsumo base %", value=0.80, step=0.01)
+    resa = st.number_input(
+        "Resa zona (kWh/kWp)",
+        value=1200,
+        step=50
+    )
+
+    autoc_base_perc = st.number_input(
+        "Autoconsumo base %",
+        value=0.80,
+        step=0.01
+    )
 
     autoc_bonus_perc = quota_copertura_from_kwp(bonus_kwp)
-    st.write(f"✅ Percentuale di copertura calcolato automaticamente: **{autoc_bonus_perc*100:.1f}%**")
+
+    st.write(
+        f"✅ Percentuale di copertura calcolata automaticamente: "
+        f"**{autoc_bonus_perc * 100:.1f}%**"
+    )
 
 st.divider()
+
+# =========================================================
+# CALCOLO
+# =========================================================
 
 res = compute_benefits(
     consumo_kwh=consumo,
@@ -80,7 +132,12 @@ res = compute_benefits(
     resa_kwh_kwp=resa,
     autoc_base_perc=autoc_base_perc,
     autoc_bonus_perc=autoc_bonus_perc,
+    incremento_prezzo_annuo=incremento,
 )
+
+# =========================================================
+# RISULTATI
+# =========================================================
 
 st.header("📊 Risultati Simulazione")
 
@@ -88,45 +145,68 @@ colA, colB = st.columns(2)
 
 with colA:
     st.subheader("Energia (kWh)")
-    st.write(f"**Produzione impianto upgrade (kWh):** {res['produzione_bonus']:,.0f}")
-    st.write(f"**Energia coperta dall'impianto upgrade (kWh):** {res['autoconsumo_bonus']:,.0f}")
-    st.write(f"**Energia immessa in rete (kWh):** {res['energia_immessa']:,.0f}")
-    st.write(f"**Energia aggiuntiva coperta rispetto al base (kWh):** {res['delta_autoconsumo']:,.0f}")
+    st.write(f"Produzione impianto upgrade: {res['produzione_bonus']:,.0f} kWh")
+    st.write(f"Energia coperta upgrade: {res['autoconsumo_bonus']:,.0f} kWh")
+    st.write(f"Energia immessa in rete: {res['energia_immessa']:,.0f} kWh")
+    st.write(f"Energia aggiuntiva vs base: {res['delta_autoconsumo']:,.0f} kWh")
 
 with colB:
-    st.subheader("Benefici economici Rendita Energetica Attiva (€ / anno)")
-    st.write(f"**Maggior risparmio da copertura aggiuntiva:** € {res['vantaggio_extra_autoconsumo']:,.2f}")
-    st.write(f"**RID €/anno:** € {res['rid_annuo']:,.2f}")
-    st.write(f"**CER incentivo €/anno:** € {res['cer_prudente']:,.2f}")
+    st.subheader("Benefici economici (€ / anno)")
+    st.write(f"Maggior risparmio copertura aggiuntiva: € {res['vantaggio_extra_autoconsumo']:,.2f}")
+    st.write(f"RID annuo: € {res['rid_annuo']:,.2f}")
+    st.write(f"CER incentivo: € {res['cer_prudente']:,.2f}")
     st.write("---")
-    st.write(f"**Totale benefici annui (Copertura Aggiuntiva + RID + CER):** € {res['totale_benefici_annui']:,.2f}")
-    st.write(f"**Detrazione fiscale annua:** € {res['detrazione_annua']:,.2f}")
-    st.success(f"✅ Beneficio annuale totale Rendita Energetica Attiva: € {res['beneficio_annuale_totale']:,.2f}")
+    st.write(f"Totale benefici annui: € {res['totale_benefici_annui']:,.2f}")
+    st.write(f"Detrazione fiscale annua: € {res['detrazione_annua']:,.2f}")
+    st.success(f"Beneficio annuale totale: € {res['beneficio_annuale_totale']:,.2f}")
 
 st.divider()
 
-st.header("💡 Risparmio in bolletta (copertura base)")
-st.caption("Nota: questo valore ESCLUDE il maggior risparmio da copertura aggiuntiva, già conteggiato nella voce Maggior risparmio da copertura aggiuntiva'.")
-st.write(f"**RISPARMIO IN BOLLETTA ANNUO:** € {res['risparmio_bolletta']:,.2f}")
+# =========================================================
+# RISPARMIO COMPLESSIVO
+# =========================================================
 
-st.info(f"**RISPARMIO COMPLESSIVO ANNUALE (benefici + detrazione + risparmio bolletta):** € {res['risparmio_complessivo_annuo']:,.2f}")
-st.write(f"**RISPARMIO COMPLESSIVO IN 10 ANNI (include risparmio bolletta):** € {res['risparmio_complessivo_10']:,.2f}")
+st.header("💡 Risparmio in bolletta")
+st.write(f"Risparmio bolletta annuo: € {res['risparmio_bolletta']:,.2f}")
+
+st.info(
+    f"Risparmio complessivo annuo: € {res['risparmio_complessivo_annuo']:,.2f}"
+)
+
+st.write(
+    f"Risparmio complessivo 10 anni: € {res['risparmio_complessivo_10']:,.2f}"
+)
+
+st.write(
+    f"Risparmio complessivo 20 anni: € {res['risparmio_complessivo_20']:,.2f}"
+)
 
 st.divider()
+
+# =========================================================
+# RENDITA NEL TEMPO
+# =========================================================
 
 st.header("⏳ Rendita Energetica Attiva nel Tempo")
 
 colX, colY = st.columns(2)
+
 with colX:
-    st.metric("Rendita Energetica Attiva 10 anni", f"€ {res['beneficio_10_anni']:,.2f}")
+    st.metric("Rendita 10 anni", f"€ {res['beneficio_10_anni']:,.2f}")
+
 with colY:
-    st.metric("Rendita Energetica Attiva 20 anni", f"€ {res['beneficio_20_anni']:,.2f}")
+    st.metric("Rendita 20 anni", f"€ {res['beneficio_20_anni']:,.2f}")
 
 st.divider()
 
+# =========================================================
+# PDF
+# =========================================================
+
 st.header("📄 Report Cliente (PDF)")
 
-if st.button("📌 Genera Report PDF VEN/FRIULI"):
+if st.button("📌 Genera Report PDF"):
+
     pdf_path = build_pdf(
         cliente,
         res,
@@ -136,12 +216,14 @@ if st.button("📌 Genera Report PDF VEN/FRIULI"):
         bonus_kwp,
         resa,
         prezzo_energia,
+        incremento,
         rid,
         cer,
         quota,
         autoc_base_perc,
         autoc_bonus_perc,
     )
+
     with open(pdf_path, "rb") as f:
         st.download_button(
             label="⬇️ Scarica Report PDF",
@@ -149,4 +231,5 @@ if st.button("📌 Genera Report PDF VEN/FRIULI"):
             file_name=pdf_path,
             mime="application/pdf"
         )
+
     st.success("PDF generato correttamente!")
