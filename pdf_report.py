@@ -186,44 +186,52 @@ def build_pdf(
     story.append(Paragraph("Scheda tecnica della simulazione", styles["Heading1"]))
     story.append(Spacer(1, 15))
 
-    data_sim = [
-        ["Voce", "Valore"],
-        ["Consumo annuo (kWh)", f"{consumo_kwh:,.0f}"],
-        ["Impianto base (kWp)", f"{base_kwp:.2f}"],
-        ["Impianto upgrade (kWp)", f"{bonus_kwp:.2f}"],
-        ["Resa ipotizzata (kWh/kWp)", f"{resa_kwh_kwp:,.0f}"],
-        ["Produzione teorica upgrade (kWh)", f"{res['produzione_bonus_teorica']:,.0f}"],
+    story.append(Paragraph(f"<b>Cliente:</b> {cliente}", styles["Normal"]))
+    story.append(Spacer(1, 8))
+
+    story.append(Paragraph(
+        "La presente simulazione è stata elaborata sulla base delle seguenti ipotesi tecniche ed economiche:",
+        styles["Normal"]
+    ))
+    story.append(Spacer(1, 12))
+
+    testo_simulazione = [
+        f"Consumo annuo stimato: {consumo_kwh:,.0f} kWh",
+        f"Impianto base considerato: {base_kwp:.2f} kWp",
+        f"Impianto upgrade considerato: {bonus_kwp:.2f} kWp",
+        f"Resa ipotizzata per area geografica: {resa_kwh_kwp:,.0f} kWh/kWp",
+        f"Produzione teorica impianto upgrade: {res['produzione_bonus_teorica']:,.0f} kWh",
     ]
 
     if res["percentuale_clipping"] > 0:
-        data_sim.append([
-        "Ottimizzazione inverter (clipping stimato)",
-        f"{res['percentuale_clipping']*100:.1f}%"
-    ])
+        testo_simulazione.append(
+            f"Ottimizzazione inverter (clipping stimato): {res['percentuale_clipping']*100:.1f}%"
+        )
 
-    data_sim.append([
-        "Produzione effettiva upgrade (kWh)",
-        f"{res['produzione_bonus']:,.0f}"
-    ])
+    testo_simulazione += [
+    f"Produzione effettiva stimata: {res['produzione_bonus']:,.0f} kWh",
+    "",
+    "Parametri economici adottati nella simulazione:",
+    f"Prezzo energia evitata: {prezzo_energia:.3f} €/kWh",
+    f"Ritiro Dedicato (RID): {rid_eur_kwh:.3f} €/kWh",
+    f"Incentivo Comunità Energetica (CER): {cer_eur_kwh:.3f} €/kWh",
+    f"Quota energia condivisa stimata: {quota_condivisa*100:.0f}%",
+    f"Costo impianto considerato: € {costo_impianto:,.2f}",
+    "",
+    "Ipotesi di copertura dei consumi:",
+    f"Copertura con impianto base: {autoc_base_perc*100:.1f}%",
+    f"Copertura con impianto upgrade: {autoc_bonus_perc*100:.1f}%",
+    "",
+    "Le percentuali di copertura rappresentano una stima prudenziale "
+    "della quota di fabbisogno energetico annuo coperta dall’impianto "
+    "fotovoltaico in presenza di accumulo da 16 kWh."
+]
 
-    data_sim += [
-        ["Prezzo energia evitata (€/kWh)", f"{prezzo_energia:.3f}"],
-        ["RID (€/kWh)", f"{rid_eur_kwh:.3f}"],
-        ["CER (€/kWh)", f"{cer_eur_kwh:.3f}"],
-        ["Quota energia condivisa (%)", f"{quota_condivisa*100:.0f}%"],
-        ["Costo impianto (€)", f"{costo_impianto:,.2f}"],
-        ["Copertura consumi impianto base (%)", f"{autoc_base_perc*100:.1f}%"],
-        ["Copertura consumi upgrade (%)", f"{autoc_bonus_perc*100:.1f}%"],
-    ]
+    for riga in testo_simulazione:
+        story.append(Paragraph(riga, styles["Normal"]))
+        story.append(Spacer(1, 6))
 
-    table_sim = Table(data_sim, colWidths=[300, 150])
-    table_sim.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
-        ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
-    ]))
-
-    story.append(table_sim)
-    story.append(Spacer(1, 30))
+    story.append(Spacer(1, 20))
 
     # =====================================================
     # PAGINA 2 — BENEFICI ANNUALI
