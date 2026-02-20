@@ -603,7 +603,7 @@ def build_pdf(
         "In un contesto di mercati energetici volatili e strutturalmente in crescita, "
         "proteggersi dal rischio di aumento dei costi dell’energia elettrica non è un'opzione secondaria, ma rappresenta "
         "una leva di stabilità economica nel medio-lungo periodo.",
-        f"Secondo i dati storici, il prezzo medio dell'energia elettrica per la clientela domestica in Italia è cresciuto mediamente tra il 3% e il 5% all'anno negli ultimi 20 anni. Negli ultimi cicli di mercato questa dinamica si è ancor più accentuata, con impatti significativi sulle famiglie e sui budget familiari. La presente simulazione considera un incremento futuro dei prezzi dell’energia pari a {incremento*100:.1f}%. "
+        f"Secondo i dati storici, il prezzo medio dell'energia elettrica per la clientela domestica in Italia è cresciuto mediamente tra il 3% e il 5% all'anno negli ultimi 20 anni. Negli ultimi cicli di mercato questa dinamica si è ancor più accentuata, con impatti significativi sulle famiglie e sui budget familiari. La presente simulazione considera un incremento futuro dei prezzi dell’energia pari a {incremento*100:.1f}%. ",
         "Qualora tali aumenti dovessero verificarsi, il beneficio economico cumulato "
         "risulterebbe ulteriormente maggiore.",
         "In altre parole, ogni anno che passa senza realizzare l’intervento equivale a:",
