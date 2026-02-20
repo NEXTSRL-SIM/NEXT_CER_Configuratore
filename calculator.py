@@ -216,4 +216,6 @@ def compute_benefits(
         "beneficio_20_anni": beneficio_20_anni,
         "risparmio_complessivo_10": risparmio_complessivo_10,
         "risparmio_complessivo_20": risparmio_complessivo_20,
+
+        "risparmio_complessivo_annuo": beneficio_annuale_totale + risparmio_bolletta,
     }
