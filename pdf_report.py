@@ -166,6 +166,52 @@ def build_pdf(cliente, res, costo_impianto):
     story.append(PageBreak())
 
     # =====================================================
+    # SCHEDA TECNICA DI SIMULAZIONE
+    # =====================================================
+
+    story.append(Paragraph("Scheda tecnica della simulazione", styles["Heading1"]))
+    story.append(Spacer(1, 15))
+
+    data_sim = [
+        ["Voce", "Valore"],
+        ["Consumo annuo (kWh)", f"{resumo_consumo:,.0f}"],
+        ["Impianto base (kWp)", f"{base_kwp:.2f}"],
+        ["Impianto upgrade (kWp)", f"{bonus_kwp:.2f}"],
+        ["Resa ipotizzata (kWh/kWp)", f"{resa_kwh_kwp:,.0f}"],
+        ["Produzione teorica upgrade (kWh)", f"{res['produzione_bonus_teorica']:,.0f}"],
+    ]
+
+    if res["percentuale_clipping"] > 0:
+        data_sim.append([
+        "Ottimizzazione inverter (clipping stimato)",
+        f"{res['percentuale_clipping']*100:.1f}%"
+    ])
+
+    data_sim.append([
+        "Produzione effettiva upgrade (kWh)",
+        f"{res['produzione_bonus']:,.0f}"
+    ])
+
+    data_sim += [
+        ["Prezzo energia evitata (€/kWh)", f"{prezzo_energia:.3f}"],
+        ["RID (€/kWh)", f"{rid_eur_kwh:.3f}"],
+        ["CER (€/kWh)", f"{cer_eur_kwh:.3f}"],
+        ["Quota energia condivisa (%)", f"{quota_condivisa*100:.0f}%"],
+        ["Costo impianto (€)", f"{costo_impianto:,.2f}"],
+        ["Copertura consumi impianto base (%)", f"{autoc_base_perc*100:.1f}%"],
+        ["Copertura consumi upgrade (%)", f"{autoc_bonus_perc*100:.1f}%"],
+    ]
+
+    table_sim = Table(data_sim, colWidths=[300, 150])
+    table_sim.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
+    ]))
+
+    story.append(table_sim)
+    story.append(Spacer(1, 30))
+
+    # =====================================================
     # PAGINA 2 — BENEFICI ANNUALI
     # =====================================================
 
@@ -375,7 +421,7 @@ def build_pdf(cliente, res, costo_impianto):
         "NEXT SRL - Report sinulazione",
         "valori indicativi",
         ""
-        f"data {oggi}"
+        f"Data {oggi}"
     ]
 
     for p in testo_chiusura:
