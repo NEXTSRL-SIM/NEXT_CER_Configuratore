@@ -112,22 +112,26 @@ def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
     g = round(incremento, 4)
 
     formula = (
-        r"$0 = -"
-        + str(costo)
-        + r" + \sum_{t=1}^{10} \frac{"
-        + str(flusso)
-        + r"(1 + "
-        + str(g)
-        + r")^{t-1}}{(1 + r)^t}$"
+        f"0 = -{costo} + SUM(t=1→10) "
+        f"[ {flusso} × (1 + {g})^(t-1) / (1 + r)^t ]"
     )
 
-    ax.text(0.5, 0.5, formula, fontsize=16, ha="center", va="center")
+    ax.text(
+        0.5,
+        0.5,
+        formula,
+        fontsize=16,
+        ha="center",
+        va="center",
+        fontfamily="DejaVu Sans"
+    )
 
     file_path = "formula_irr.png"
     plt.savefig(file_path, bbox_inches="tight", dpi=300)
     plt.close(fig)
 
     return file_path
+
 
 
 
