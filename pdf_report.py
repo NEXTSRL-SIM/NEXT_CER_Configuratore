@@ -24,19 +24,31 @@ import os
 import datetime
 import matplotlib.pyplot as plt
 
-def make_payback_chart(costo, beneficio_annuo):
+def make_payback_chart(costo, beneficio_primi_10, beneficio_dal_11):
+
     anni = list(range(0, 21))
-    valori = [beneficio_annuo * a for a in anni]
+    valori = []
+
+    cumulato = 0
+
+    for anno in anni:
+        if anno == 0:
+            valori.append(0)
+            continue
+
+        if anno <= 10:
+            cumulato += beneficio_primi_10
+        else:
+            cumulato += beneficio_dal_11
+
+        valori.append(cumulato)
 
     fig, ax = plt.subplots()
 
-    # Linea rendimento cumulato (verde)
-    ax.plot(anni, valori, color="#4CAF50", linewidth=3)
+    ax.plot(anni, valori, linewidth=3)
+    ax.axhline(costo, linestyle="--", linewidth=2)
 
-    # Linea investimento (light blue)
-    ax.axhline(costo, color="#5CB8E4", linestyle="--", linewidth=2)
-
-    ax.set_title("Rientro dell'investimento (Payback)")
+    ax.set_title("Rientro dell'investimento (Payback reale)")
     ax.set_xlabel("Anni")
     ax.set_ylabel("Beneficio cumulato (€)")
 
@@ -44,15 +56,12 @@ def make_payback_chart(costo, beneficio_annuo):
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
 
-    # DEBUG: timestamp dentro il grafico (poi lo togli)
-    stamp = datetime.datetime.now().strftime("%H:%M:%S")
-    ax.text(0.99, 0.01, stamp, transform=ax.transAxes, ha="right", va="bottom", fontsize=8, alpha=0.6)
-
     base_dir = os.path.dirname(os.path.abspath(__file__)) if "__file__" in globals() else os.getcwd()
     path = os.path.join(base_dir, f"payback_{int(datetime.datetime.now().timestamp())}.png")
 
     fig.savefig(path, bbox_inches="tight", dpi=150)
     plt.close(fig)
+
     return path
 
 
@@ -286,7 +295,17 @@ def build_pdf(cliente, res, costo_impianto):
     story.append(Paragraph("Proiezione nel Tempo e Rientro dell’Investimento", styles["Heading1"]))
     story.append(Spacer(1, 15))
 
-    chart1 = make_payback_chart(costo_impianto, res["risparmio_complessivo_annuo"])
+    beneficio_primi_10 = res["risparmio_complessivo_annuo"]
+
+    beneficio_dal_11 = (
+    res["beneficio_annuale_totale"] - res["detrazione_annua"]
+    ) + res["risparmio_bolletta"]
+
+    chart1 = make_payback_chart(
+    costo_impianto,
+    beneficio_primi_10,
+    beneficio_dal_11
+    )
     chart2 = make_benefits_chart(res["beneficio_10_anni"], res["beneficio_20_anni"])
 
     story.append(Image(chart1, width=400, height=250))
