@@ -98,7 +98,7 @@ def calcola_orizzonte(
 
         # Benefici variabili legati al prezzo energia
         vantaggio_autoc = delta_autoconsumo * prezzo
-        risparmio_bolletta = autoconsumo_base * prezzo
+        
 
         rid = energia_immessa * rid_eur_kwh
         cer = energia_immessa * quota_condivisa * cer_eur_kwh
@@ -108,7 +108,6 @@ def calcola_orizzonte(
             + rid
             + cer
             + detrazione_annua
-            + risparmio_bolletta
         )
 
         totale += beneficio_annuo
@@ -118,6 +117,21 @@ def calcola_orizzonte(
 
     return totale
 
+
+def calcola_risparmio_bolletta_orizzonte(
+    anni,
+    prezzo_iniziale,
+    incremento,
+    autoconsumo_base
+):
+    totale = 0
+    prezzo = prezzo_iniziale
+
+    for _ in range(anni):
+        totale += autoconsumo_base * prezzo
+        prezzo *= (1 + incremento)
+
+    return totale
 
 def compute_benefits(
     consumo_kwh,
@@ -197,6 +211,8 @@ def compute_benefits(
     # -------------------------------
     # 10 ANNI
     # -------------------------------
+    
+    # Rendita pura (senza bolletta)
     beneficio_10_anni = calcola_orizzonte(
         10,
         prezzo_energia,
@@ -209,7 +225,15 @@ def compute_benefits(
         quota_condivisa,
         detrazione_annua
     )
-    risparmio_complessivo_10 = beneficio_10_anni
+
+    # Risparmio bolletta dinamico
+    risparmio_bolletta_10 = calcola_risparmio_bolletta_orizzonte(
+        10,
+        prezzo_energia,
+        incremento_prezzo_annuo,
+        autoconsumo_base
+    )
+    risparmio_complessivo_10 = beneficio_10_anni + risparmio_bolletta_10
 
     # -------------------------------
     # 20 ANNI (detrazione solo primi 10)
@@ -245,7 +269,13 @@ def compute_benefits(
 
     beneficio_20_anni = beneficio_primi_10 + beneficio_secondi_10
 
-    risparmio_complessivo_20 = beneficio_20_anni
+    risparmio_bolletta_20 = calcola_risparmio_bolletta_orizzonte(
+        20,
+        prezzo_energia,
+        incremento_prezzo_annuo,
+        autoconsumo_base
+    )
+    risparmio_complessivo_20 = beneficio_20_anni + risparmio_bolletta_20
 
     # -------------------------------
     # RETURN
@@ -285,16 +315,24 @@ def compute_benefits(
         "risparmio_complessivo_10": risparmio_complessivo_10,
         "risparmio_complessivo_20": risparmio_complessivo_20,
 
-        "risparmio_complessivo_annuo": calcola_orizzonte(
-            1,
-            prezzo_energia,
-            incremento_prezzo_annuo,
-            autoconsumo_base,
-            delta_autoconsumo,
-            energia_immessa,
-            rid_eur_kwh,
-            cer_eur_kwh,
-            quota_condivisa,
-            detrazione_annua
-        ),
+        "risparmio_complessivo_annuo":
+            calcola_orizzonte(
+                1,
+                prezzo_energia,
+                incremento_prezzo_annuo,
+                autoconsumo_base,
+                delta_autoconsumo,
+                energia_immessa,
+                rid_eur_kwh,
+                cer_eur_kwh,
+                quota_condivisa,
+                detrazione_annua
+            )
+            +
+            calcola_risparmio_bolletta_orizzonte(
+                1,
+                prezzo_energia,
+                incremento_prezzo_annuo,
+                autoconsumo_base
+            )
     }
