@@ -96,7 +96,21 @@ def make_benefits_chart(b10, b20):
 # ---------------------------------------------------------
 # BUILD PDF
 # ---------------------------------------------------------
-def build_pdf(cliente, res, costo_impianto):
+def build_pdf(
+    cliente,
+    res,
+    costo_impianto,
+    consumo_kwh,
+    base_kwp,
+    bonus_kwp,
+    resa_kwh_kwp,
+    prezzo_energia,
+    rid_eur_kwh,
+    cer_eur_kwh,
+    quota_condivisa,
+    autoc_base_perc,
+    autoc_bonus_perc,
+):
 
     filename = f"Report_{cliente}.pdf"
     doc = SimpleDocTemplate(filename, pagesize=A4)

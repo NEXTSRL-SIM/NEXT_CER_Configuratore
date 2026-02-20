@@ -127,7 +127,21 @@ st.divider()
 st.header("📄 Report Cliente (PDF)")
 
 if st.button("📌 Genera Report PDF VEN/FRIULI"):
-    pdf_path = build_pdf(cliente, res, costo)
+    pdf_path = build_pdf(
+        cliente,
+        res,
+        costo,
+        consumo,
+        base_kwp,
+        bonus_kwp,
+        resa,
+        prezzo_energia,
+        rid,
+        cer,
+        quota,
+        autoc_base_perc,
+        autoc_bonus_perc,
+    )
     with open(pdf_path, "rb") as f:
         st.download_button(
             label="⬇️ Scarica Report PDF",
