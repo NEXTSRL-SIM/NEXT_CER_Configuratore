@@ -63,8 +63,8 @@ with col6:
     resa = st.number_input("Resa zona (kWh/kWp)", value=1200, step=50)
     autoc_base_perc = st.number_input("Autoconsumo base %", value=0.80, step=0.01)
 
-    autoc_bonus_perc = autoconsumo_bonus_from_kwp(bonus_kwp)
-    st.write(f"✅ Autoconsumo bonus calcolato automaticamente: **{autoc_bonus_perc*100:.1f}%**")
+    autoc_bonus_perc = quota_copertura_from_kwp(bonus_kwp)
+    st.write(f"✅ Percentuale di copertura calcolato automaticamente: **{autoc_bonus_perc*100:.1f}%**")
 
 st.divider()
 
