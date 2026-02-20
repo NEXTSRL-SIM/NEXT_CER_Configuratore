@@ -227,6 +227,10 @@ def build_pdf(
     "fotovoltaico in presenza di accumulo da 16 kWh.",
     "",
     "",
+    "",
+    "",
+    "",
+    "",
     ""
 ]
 
