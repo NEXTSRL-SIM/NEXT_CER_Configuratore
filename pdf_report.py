@@ -459,6 +459,8 @@ def build_pdf(
         body_style
     ))
 
+    story.append(PageBreak())
+
     story.append(Paragraph("Tasso Interno di Rendimento (IRR)", styles["Heading1"]))
     story.append(Spacer(1, 20))
 
