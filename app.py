@@ -145,10 +145,10 @@ colA, colB = st.columns(2)
 
 with colA:
     st.subheader("Energia (kWh)")
-    st.write(f"Produzione impianto upgrade: {res['produzione_bonus']:,.0f} kWh")
-    st.write(f"Energia coperta upgrade: {res['autoconsumo_bonus']:,.0f} kWh")
+    st.write(f"Produzione impianto (al netto eventuale clipping): {res['produzione_bonus']:,.0f} kWh")
+    st.write(f"Energia coperta dall'impianto: {res['autoconsumo_bonus']:,.0f} kWh")
     st.write(f"Energia immessa in rete: {res['energia_immessa']:,.0f} kWh")
-    st.write(f"Energia aggiuntiva vs base: {res['delta_autoconsumo']:,.0f} kWh")
+    st.write(f"Energia aggiuntiva vs imp. base: {res['delta_autoconsumo']:,.0f} kWh")
 
 with colB:
     st.subheader("Benefici economici (€ / anno)")
@@ -158,7 +158,7 @@ with colB:
     st.write("---")
     st.write(f"Totale benefici annui: € {res['totale_benefici_annui']:,.2f}")
     st.write(f"Detrazione fiscale annua: € {res['detrazione_annua']:,.2f}")
-    st.success(f"Beneficio annuale totale: € {res['beneficio_annuale_totale']:,.2f}")
+    st.success(f"Rendita Energetica Attiva (beneficio totale): € {res['beneficio_annuale_totale']:,.2f}")
 
 st.divider()
 
