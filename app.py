@@ -88,25 +88,25 @@ colA, colB = st.columns(2)
 
 with colA:
     st.subheader("Energia (kWh)")
-    st.write(f"**Produzione bonus (kWh):** {res['produzione_bonus']:,.0f}")
-    st.write(f"**Quota di copertura dei consumi (kWh):** {res['autoconsumo_bonus']:,.0f}")
-    st.write(f"**Energia immessa (kWh):** {res['energia_immessa']:,.0f}")
-    st.write(f"**Delta autoconsumo vs base (kWh):** {res['delta_autoconsumo']:,.0f}")
+    st.write(f"**Produzione impianto upgrade (kWh):** {res['produzione_bonus']:,.0f}")
+    st.write(f"**Energia coperta dall'impianto upgrade (kWh):** {res['autoconsumo_bonus']:,.0f}")
+    st.write(f"**Energia immessa in rete (kWh):** {res['energia_immessa']:,.0f}")
+    st.write(f"**Energia aggiuntiva coperta rispetto al base (kWh):** {res['delta_autoconsumo']:,.0f}")
 
 with colB:
-    st.subheader("Benefici economici Rendita Energetica Attiva(€ / anno)")
+    st.subheader("Benefici economici Rendita Energetica Attiva (€ / anno)")
     st.write(f"**Maggior risparmio da copertura aggiuntiva:** € {res['vantaggio_extra_autoconsumo']:,.2f}")
     st.write(f"**RID €/anno:** € {res['rid_annuo']:,.2f}")
-    st.write(f"**CER prudente €/anno:** € {res['cer_prudente']:,.2f}")
+    st.write(f"**CER incentivo €/anno:** € {res['cer_prudente']:,.2f}")
     st.write("---")
-    st.write(f"**Totale benefici annui (Extra Aut. + RID + CER):** € {res['totale_benefici_annui']:,.2f}")
+    st.write(f"**Totale benefici annui (Copertura Aggiuntiva + RID + CER):** € {res['totale_benefici_annui']:,.2f}")
     st.write(f"**Detrazione fiscale annua:** € {res['detrazione_annua']:,.2f}")
-    st.success(f"✅ Beneficio annuale totale rendita energetica attiva: € {res['beneficio_annuale_totale']:,.2f}")
+    st.success(f"✅ Beneficio annuale totale Rendita Energetica Attiva: € {res['beneficio_annuale_totale']:,.2f}")
 
 st.divider()
 
-st.header("💡 Risparmio in bolletta (autoconsumo diretto)")
-st.caption("Nota: questo valore ESCLUDE il maggior risparmio da copertura aggiuntiva, già conteggiato nella voce 'VMaggior risparmio da copertura aggiuntiva'.")
+st.header("💡 Risparmio in bolletta (copertura base)")
+st.caption("Nota: questo valore ESCLUDE il maggior risparmio da copertura aggiuntiva, già conteggiato nella voce Maggior risparmio da copertura aggiuntiva'.")
 st.write(f"**RISPARMIO IN BOLLETTA ANNUO:** € {res['risparmio_bolletta']:,.2f}")
 
 st.info(f"**RISPARMIO COMPLESSIVO ANNUALE (benefici + detrazione + risparmio bolletta):** € {res['risparmio_complessivo_annuo']:,.2f}")
@@ -114,13 +114,13 @@ st.write(f"**RISPARMIO COMPLESSIVO IN 10 ANNI (include risparmio bolletta):** �
 
 st.divider()
 
-st.header("⏳ Beneficio nel Tempo - Rendita Energetica Attiva")
+st.header("⏳ Rendita Energetica Attiva nel Tempo")
 
 colX, colY = st.columns(2)
 with colX:
-    st.metric("Beneficio totale 10 anni", f"€ {res['beneficio_10_anni']:,.2f}")
+    st.metric("Rendita Energetica Attiva 10 anni", f"€ {res['beneficio_10_anni']:,.2f}")
 with colY:
-    st.metric("Beneficio totale 20 anni", f"€ {res['beneficio_20_anni']:,.2f}")
+    st.metric("Rendita Energetica Attiva 20 anni", f"€ {res['beneficio_20_anni']:,.2f}")
 
 st.divider()
 
