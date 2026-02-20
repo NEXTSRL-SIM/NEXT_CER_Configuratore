@@ -470,7 +470,6 @@ def build_pdf(
         "Secondo i dati storici, il prezzo medio dell'energia elettrica per la clientela domestica in Italia è cresciuto mediamente tra il 3% e il 5% all'anno negli ultimi 20 anni. Negli ultimi cicli di mercato questa dinamica si è ancor più accentuata, con impatti significativi sulle famiglie e sui budget familiari. La presente simulazione non considera alcun incremento futuro dei prezzi dell’energia. "
         "Qualora tali aumenti dovessero verificarsi, il beneficio economico cumulato "
         "risulterebbe ulteriormente maggiore.",
-        "",
         "In altre parole, ogni anno che passa senza realizzare l’intervento equivale a:",
         "• perdere una opportunità di ridurre la spesa energetica;",
         "• rinunciare a una rendita energetica positiva;",
