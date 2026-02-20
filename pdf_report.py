@@ -107,13 +107,17 @@ def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
     fig, ax = plt.subplots(figsize=(10, 2))
     ax.axis("off")
 
+    costo = round(costo_impianto, 2)
+    flusso = round(flusso_annuo, 2)
+    g = round(incremento, 4)
+
     formula = (
         r"$0 = -"
-        + f"{costo_impianto:,.0f}"
+        + str(costo)
         + r" + \sum_{t=1}^{10} \frac{"
-        + f"{flusso_annuo:,.0f}"
+        + str(flusso)
         + r"(1 + "
-        + f"{incremento*100:.2%}"
+        + str(g)
         + r")^{t-1}}{(1 + r)^t}$"
     )
 
@@ -124,6 +128,7 @@ def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
     plt.close(fig)
 
     return file_path
+
 
 
 def build_pdf(
