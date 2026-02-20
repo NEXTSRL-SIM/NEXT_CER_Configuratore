@@ -367,7 +367,6 @@ def build_pdf(
     # PAGINA 3 — GRAFICI
     # =====================================================
 
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, PageBreak
 
     story.append(Paragraph("Proiezione nel Tempo e Rientro dell’Investimento", styles["Heading1"]))
     story.append(Spacer(1, 15))
