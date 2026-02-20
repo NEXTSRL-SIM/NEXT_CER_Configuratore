@@ -102,7 +102,7 @@ def make_benefits_chart(b10, b20):
 # GENERAZIONE FORMULA IRR COME IMMAGINE
 # =====================================================
 
-import numpy as np
+import numpy_financial as npf
 
 def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
 
@@ -120,7 +120,7 @@ def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
     for t in range(1, 11):
         flussi.append(flusso * ((1 + g) ** (t - 1)))
 
-    irr = np.irr(flussi)
+    irr = npf.irr(flussi)
     irr_percent = round(irr * 100, 2)
 
     # -----------------------------
