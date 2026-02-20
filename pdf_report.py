@@ -15,6 +15,8 @@ from reportlab.lib.units import inch
 import datetime
 import matplotlib.pyplot as plt
 import os
+import matplotlib.pyplot as plt
+from reportlab.platypus import Image
 
 
 # ---------------------------------------------------------
@@ -96,6 +98,34 @@ def make_benefits_chart(b10, b20):
 # ---------------------------------------------------------
 # BUILD PDF
 # ---------------------------------------------------------
+# =====================================================
+# GENERAZIONE FORMULA IRR COME IMMAGINE
+# =====================================================
+
+def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
+
+    fig, ax = plt.subplots(figsize=(10, 2))
+    ax.axis("off")
+
+    formula = (
+        r"$0 = -"
+        + f"{costo_impianto:,.0f}"
+        + r" + \sum_{t=1}^{10} \frac{"
+        + f"{flusso_annuo:,.0f}"
+        + r"(1 + "
+        + f"{incremento:.2%}"
+        + r")^{t-1}}{(1 + r)^t}$"
+    )
+
+    ax.text(0.5, 0.5, formula, fontsize=16, ha="center", va="center")
+
+    file_path = "formula_irr.png"
+    plt.savefig(file_path, bbox_inches="tight", dpi=300)
+    plt.close(fig)
+
+    return file_path
+
+
 def build_pdf(
     cliente,
     res,
@@ -370,30 +400,18 @@ def build_pdf(
     ))
     story.append(Spacer(1, 15))
 
-    story.append(Paragraph(
-        "Formula generale:",
-            styles["Heading2"]
-    ))
-    story.append(Spacer(1, 10))
-
-    story.append(Paragraph(
-        "0 = -I + Σ [ CF₁ · (1 + g)ᵗ⁻¹ / (1 + r)ᵗ ]",
-        styles["Normal"]
-    ))
+    story.append(Paragraph("Formula applicata:", styles["Heading2"]))
     story.append(Spacer(1, 15))
 
-    story.append(Paragraph(
-        f"Applicazione con i valori della simulazione:",
-        styles["Heading2"]
-    ))
-    story.append(Spacer(1, 10))
+    formula_path = genera_formula_irr_image(
+        costo_impianto,
+        res["risparmio_complessivo_annuo"],
+        incremento,
+    )
 
-    story.append(Paragraph(
-        f"0 = -{costo_impianto:,.0f} + Σ [ {res['risparmio_complessivo_annuo']:,.0f} · "
-        f"(1 + {incremento:.2%})ᵗ⁻¹ / (1 + r)ᵗ ]   per t = 1 … 10",
-        styles["Normal"]
-    ))
+    story.append(Image(formula_path, width=450, height=90))
     story.append(Spacer(1, 20))
+
 
     story.append(Paragraph(
         f"<b>IRR (10 anni) = {res['irr_10']:.2f}% annuo</b>",
