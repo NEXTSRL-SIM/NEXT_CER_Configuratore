@@ -236,9 +236,9 @@ def build_pdf(
 
     for riga in testo_simulazione:
         story.append(Paragraph(riga, styles["Normal"]))
-        story.append(Spacer(1, 20))
+        story.append(Spacer(1, 15))
 
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 15))
 
     # =====================================================
     # PAGINA 2 — BENEFICI ANNUALI
