@@ -110,6 +110,7 @@ def build_pdf(
     quota_condivisa,
     autoc_base_perc,
     autoc_bonus_perc,
+    incremento,
 ):
 
     filename = f"Report_{cliente}.pdf"
@@ -213,6 +214,7 @@ def build_pdf(
     "",
     "<b>Parametri economici adottati nella simulazione:</b>",
     f"Prezzo energia evitata: <b>{prezzo_energia:.3f} €/kWh</b>",
+    f"Incremento annuo prezzo energia: <b>{incremento*100:.1f}%</b>",
     f"Ritiro Dedicato (RID): <b>{rid_eur_kwh:.3f} €/kWh</b>",
     f"Incentivo Comunità Energetica (CER): <b>{cer_eur_kwh:.3f} €/kWh</b>",
     f"Quota energia condivisa stimata: <b>{quota_condivisa*100:.0f}%</b>",

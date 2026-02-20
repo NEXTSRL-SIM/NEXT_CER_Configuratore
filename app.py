@@ -216,12 +216,12 @@ if st.button("📌 Genera Report PDF"):
         bonus_kwp,
         resa,
         prezzo_energia,
-        incremento,
         rid,
         cer,
         quota,
         autoc_base_perc,
         autoc_bonus_perc,
+        incremento,
     )
 
     with open(pdf_path, "rb") as f:
