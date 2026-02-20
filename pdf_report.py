@@ -476,7 +476,7 @@ def build_pdf(
         "• rinunciare a una rendita energetica positiva;",
         "• esporsi ulteriormente all’aumento dei costi dell’energia.",
         "",
-        "Questa dinamica si traduce in un costo opportunità concreto, che cresce con l’aumento dei prezzi econ l’allungamento dell’orizzonte temporale. In più, è possibile strutturare l’investimento con soluzioni di finanziamento dedicate, che consentono di distribuire la spesa nel tempo, spesso in modo sostenibile rispetto al flusso economico annuo generato dalla Rendita Energetica Attiva."
+        "Questa dinamica si traduce in un costo opportunità concreto, che cresce con l’aumento dei prezzi econ l’allungamento dell’orizzonte temporale. In più, è possibile strutturare l’investimento con soluzioni di finanziamento dedicate, che consentono di distribuire la spesa nel tempo, spesso in modo sostenibile rispetto al flusso economico annuo generato dalla Rendita Energetica Attiva.",
         "",
         "Scegliere di attivare il Sistema di Rendita Energetica Attiva Next significa "
         "trasformare una spesa energetica futura incerta in un flusso di valore definito "
