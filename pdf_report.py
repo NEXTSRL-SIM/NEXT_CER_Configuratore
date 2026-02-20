@@ -188,7 +188,7 @@ def build_pdf(
 
     data_sim = [
         ["Voce", "Valore"],
-        ["Consumo annuo (kWh)", f"{resumo_consumo:,.0f}"],
+        ["Consumo annuo (kWh)", f"{consumo_kwh:,.0f}"],
         ["Impianto base (kWp)", f"{base_kwp:.2f}"],
         ["Impianto upgrade (kWp)", f"{bonus_kwp:.2f}"],
         ["Resa ipotizzata (kWh/kWp)", f"{resa_kwh_kwp:,.0f}"],
