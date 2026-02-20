@@ -197,6 +197,10 @@ with colX:
 with colY:
     st.metric("Rendita 20 anni", f"€ {res['beneficio_20_anni']:,.2f}")
 
+st.write("DEBUG - Rendita 10:", res["beneficio_10_anni"])
+st.write("DEBUG - Vantaggio 10:", res["risparmio_complessivo_10"])
+st.write("DEBUG - Rendita 20:", res["beneficio_20_anni"])
+st.write("DEBUG - Vantaggio 20:", res["risparmio_complessivo_20"])
 st.divider()
 
 # =========================================================
