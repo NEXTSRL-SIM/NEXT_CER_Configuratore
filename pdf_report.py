@@ -226,7 +226,11 @@ def build_pdf(cliente, res, costo_impianto):
     beneficio_20 = res['beneficio_20_anni']
 
     vantaggio_10 = res['risparmio_complessivo_10']
-    vantaggio_20 = res['beneficio_20_anni'] + (res['risparmio_bolletta'] * 20)
+
+    secondo_decennio = (res["beneficio_annuale_totale"] - res["detrazione_annua"]) * 10 \
+                   + res["risparmio_bolletta"] * 10
+
+    vantaggio_20 = vantaggio_10 + secondo_decennio
 
     percentuale_beneficio = (beneficio_10 / costo_impianto) * 100
     roi_10 = ((vantaggio_10 - costo_impianto) / costo_impianto) * 100
