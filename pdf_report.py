@@ -450,7 +450,6 @@ def build_pdf(
     vantaggio_10 = res["risparmio_complessivo_10"]
     differenza_netto = vantaggio_10 - costo_impianto
 
-    story.append(PageBreak())
 
     story.append(Paragraph("Valutazione Economico/Strategica Complessiva", styles["Heading1"]))
     story.append(Spacer(1, 15))
