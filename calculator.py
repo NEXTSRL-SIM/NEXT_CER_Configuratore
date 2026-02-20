@@ -133,6 +133,30 @@ def calcola_risparmio_bolletta_orizzonte(
 
     return totale
 
+def calcola_irr(flussi, guess=0.1, toll=1e-6, max_iter=1000):
+    """
+    Calcolo IRR tramite metodo di Newton-Raphson
+    """
+    r = guess
+    for _ in range(max_iter):
+        npv = 0
+        derivata = 0
+
+        for t, cf in enumerate(flussi):
+            npv += cf / (1 + r) ** t
+            if t > 0:
+                derivata -= t * cf / (1 + r) ** (t + 1)
+
+        nuovo_r = r - npv / derivata
+
+        if abs(nuovo_r - r) < toll:
+            return nuovo_r
+
+        r = nuovo_r
+
+    return r
+
+
 def compute_benefits(
     consumo_kwh,
     base_kwp,
@@ -278,6 +302,29 @@ def compute_benefits(
     risparmio_complessivo_20 = beneficio_20_anni + risparmio_bolletta_20
 
     # -------------------------------
+    # IRR 10 ANNI
+    # -------------------------------
+
+    flussi_10 = [-costo_impianto]
+
+    prezzo = prezzo_energia
+
+    for anno in range(1, 11):
+
+        vantaggio_autoc = delta_autoconsumo * prezzo
+        rid = energia_immessa * rid_eur_kwh
+        cer = energia_immessa * quota_condivisa * cer_eur_kwh
+        detrazione = detrazione_annua if anno <= 10 else 0
+        bolletta = autoconsumo_base * prezzo
+
+        flusso = vantaggio_autoc + rid + cer + detrazione + bolletta
+        flussi_10.append(flusso)
+
+        prezzo *= (1 + incremento_prezzo_annuo)
+
+    irr_10 = calcola_irr(flussi_10) * 100
+
+    # -------------------------------
     # RETURN
     # -------------------------------
     return {
@@ -334,5 +381,8 @@ def compute_benefits(
                 prezzo_energia,
                 incremento_prezzo_annuo,
                 autoconsumo_base
-            )
+            ),
+
+        "irr_10": irr_10,
+    
     }
