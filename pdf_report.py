@@ -184,16 +184,16 @@ def build_pdf(
     # =====================================================
 
     story.append(Paragraph("Scheda tecnica della simulazione", styles["Heading1"]))
-    story.append(Spacer(1, 15))
+    story.append(Spacer(1, 20))
 
     story.append(Paragraph(f"<b>Cliente:</b> {cliente}", styles["Normal"]))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 16))
 
     story.append(Paragraph(
         "La presente simulazione è stata elaborata sulla base delle seguenti ipotesi tecniche ed economiche:",
         styles["Normal"]
     ))
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 18))
 
     testo_simulazione = [
         f"Consumo annuo stimato: <b>{consumo_kwh:,.0f} kWh</b>",
