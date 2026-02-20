@@ -106,7 +106,7 @@ import numpy_financial as npf
 
 def genera_formula_irr_image(costo_impianto, flusso_annuo, incremento):
 
-    fig, ax = plt.subplots(figsize=(10, 5.5))
+    fig, ax = plt.subplots(figsize=(10, 6.5))
     ax.axis("off")
 
     costo = round(costo_impianto, 2)
