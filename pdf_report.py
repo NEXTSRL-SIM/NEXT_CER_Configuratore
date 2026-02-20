@@ -482,9 +482,18 @@ def build_pdf(
     )
 
     img_formula = Image(formula_path)
-    img_formula.drawWidth = 450
-    img_formula.drawHeight = img_formula.drawHeight * (450 / img_formula.drawWidth)
+
+    original_width = img_formula.imageWidth
+    original_height = img_formula.imageHeight
+
+    target_width = 450
+    ratio = target_width / original_width
+
+    img_formula.drawWidth = target_width
+    img_formula.drawHeight = original_height * ratio
     img_formula.hAlign = "CENTER"
+
+    story.append(img_formula)
 
     story.append(img_formula)
 
