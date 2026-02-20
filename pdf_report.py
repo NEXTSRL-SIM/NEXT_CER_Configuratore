@@ -489,3 +489,6 @@ def build_pdf(
     for p in testo_chiusura:
         story.append(Paragraph(p, body_style))
         story.append(Spacer(1, 8))
+
+    doc.build(story)
+    return filename
