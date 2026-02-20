@@ -133,7 +133,7 @@ def build_pdf(
     story.append(Spacer(1, 12))
 
     story.append(Paragraph(
-        "Iniziativa riservata al Veneto e al Friuli Venezia Giulia, valida fino al 30 marzo 2026 e limitata ai primi 20 impianti.",
+        "<b>Iniziativa valida fino al 30 marzo 2026 e limitata ai primi 20 impianti.</b>",
         styles["Normal"]
     ))
     story.append(Spacer(1, 20))
@@ -392,6 +392,9 @@ def build_pdf(
     story.append(Spacer(1, 25))
 
     differenza_netto = vantaggio_10 - costo_impianto
+
+    story.append(Paragraph("Valutazione Economico/Strategica Complessiva", styles["Heading1"]))
+    story.append(Spacer(1, 15))
 
     testo_chiusura = [
         "VALUTAZIONE ECONOMICO/STRATEGICA COMPLESSIVA",
