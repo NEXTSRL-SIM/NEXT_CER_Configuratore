@@ -45,8 +45,11 @@ def make_payback_chart(costo, beneficio_primi_10, beneficio_dal_11):
 
     fig, ax = plt.subplots()
 
-    ax.plot(anni, valori, linewidth=3)
-    ax.axhline(costo, linestyle="--", linewidth=2)
+    # Linea rendimento cumulato (verde come prima)
+    ax.plot(anni, valori, color="#4CAF50", linewidth=3)
+
+    # Linea investimento (azzurro tratteggiato come prima)
+    ax.axhline(costo, color="#5CB8E4", linestyle="--", linewidth=2)
 
     ax.set_title("Rientro dell'investimento (Payback reale)")
     ax.set_xlabel("Anni")
