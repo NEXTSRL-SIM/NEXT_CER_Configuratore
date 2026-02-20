@@ -1,88 +1,53 @@
 # calculator.py
 
-def autoconsumo_bonus_from_kwp(kwp_bonus: float) -> float:
+# ---------------------------------------------------------
+# QUOTA COPERTURA CONSUMI (ex autoconsumo bonus)
+# ---------------------------------------------------------
+
+def quota_copertura_from_kwp(kwp_bonus: float) -> float:
     """
-    Autoconsumo bonus interpolato automaticamente in base alla taglia impianto.
-    Punti fascia alta (batteria 16 kWh):
-      6.56 -> 0.80
-      7.38 -> 0.83
-      9.02 -> 0.88
-      9.84 -> 0.91
-    """
-    points = [
-        (6.56, 0.80),
-        (7.38, 0.83),
-        (9.02, 0.88),
-        (9.84, 0.91),
-    ]
+    Calcola la quota di copertura dei consumi (NON autoconsumo tecnico).
+    Progressione lineare all'interno della fascia.
 
-    if kwp_bonus <= points[0][0]:
-        return points[0][1]
-    if kwp_bonus >= points[-1][0]:
-        return points[-1][1]
+    Fascia 1: 3.28 → 5.74
+    Fascia 2: 6.56 → 9.84
 
-    for (x1, y1), (x2, y2) in zip(points, points[1:]):
-        if x1 <= kwp_bonus <= x2:
-            t = (kwp_bonus - x1) / (x2 - x1)
-            return y1 + t * (y2 - y1)
-
-    return points[0][1]
-
-
-# ==========================================================
-# FUNZIONE PRINCIPALE USATA DA app.py
-# ==========================================================
-
-def simulate(
-    consumo,
-    potenza_base,
-    potenza_bonus,
-    costo_impianto,
-    prezzo_energia,
-    rid,
-    cer,
-    quota_condivisa,
-    resa,
-    autoc_base
-):
-    """
-    Simulazione completa:
-    - autoconsumo bonus calcolato automaticamente
-    - benefici coerenti con Excel
+    Base fascia = 80%
+    Max fascia  = 85%
     """
 
-    autoc_bonus = autoconsumo_bonus_from_kwp(potenza_bonus)
+    COPERTURA_BASE = 0.80
+    COPERTURA_MAX = 0.85
 
-    return compute_benefits(
-        consumo_kwh=consumo,
-        base_kwp=potenza_base,
-        bonus_kwp=potenza_bonus,
-        prezzo_energia=prezzo_energia,
-        rid_eur_kwh=rid,
-        cer_eur_kwh=cer,
-        quota_condivisa=quota_condivisa,
-        costo_impianto=costo_impianto,
-        resa_kwh_kwp=resa,
-        autoc_base_perc=autoc_base,
-        autoc_bonus_perc=autoc_bonus,
-    )
+    if kwp_bonus <= 5.74:
+        base_fascia = 3.28
+        max_fascia = 5.74
+    else:
+        base_fascia = 6.56
+        max_fascia = 9.84
+
+    if kwp_bonus <= base_fascia:
+        return COPERTURA_BASE
+
+    if kwp_bonus >= max_fascia:
+        return COPERTURA_MAX
+
+    posizione = (kwp_bonus - base_fascia) / (max_fascia - base_fascia)
+
+    copertura = COPERTURA_BASE + posizione * (COPERTURA_MAX - COPERTURA_BASE)
+
+    return copertura
 
 
-# ==========================================================
-# CALCOLO BENEFICI (COERENTE CON EXCEL)
-# ==========================================================
+# ---------------------------------------------------------
+# CLIPPING INVERTER 6 kW
+# ---------------------------------------------------------
 
 def apply_clipping(bonus_kwp, resa_kwh_kwp, consumo_kwh):
-    """
-    Applica riduzione produzione per clipping inverter 6 kW
-    solo per impianti 8.2 - 9.02 - 9.84 kWp
-    e solo se consumo <= 9000 kWh
-    """
 
     produzione_teorica = bonus_kwp * resa_kwh_kwp
     riduzione = 0.0
 
-    # Clipping solo se consumo <= 9000
     if consumo_kwh <= 9000:
 
         kwp = round(bonus_kwp, 2)
@@ -95,11 +60,10 @@ def apply_clipping(bonus_kwp, resa_kwh_kwp, consumo_kwh):
         else:
             zona = "sud"
 
-        # Tabelle riduzione
         clipping_table = {
-            8.2:   {"nord": 0.015, "centro": 0.019, "sud": 0.023},
-            9.02:  {"nord": 0.029, "centro": 0.034, "sud": 0.041},
-            9.84:  {"nord": 0.045, "centro": 0.052, "sud": 0.059},
+            8.2:  {"nord": 0.015, "centro": 0.019, "sud": 0.023},
+            9.02: {"nord": 0.029, "centro": 0.034, "sud": 0.041},
+            9.84: {"nord": 0.045, "centro": 0.052, "sud": 0.059},
         }
 
         if kwp in clipping_table:
@@ -109,45 +73,63 @@ def apply_clipping(bonus_kwp, resa_kwh_kwp, consumo_kwh):
 
     return produzione_teorica, riduzione, produzione_effettiva
 
+
+# ---------------------------------------------------------
+# MOTORE PRINCIPALE
+# ---------------------------------------------------------
+
 def compute_benefits(
-    consumo_kwh: float,
-    base_kwp: float,
-    bonus_kwp: float,
-    prezzo_energia: float,
-    rid_eur_kwh: float,
-    cer_eur_kwh: float,
-    quota_condivisa: float,
-    costo_impianto: float,
-    resa_kwh_kwp: float,
-    autoc_base_perc: float,
-    autoc_bonus_perc: float,
-) -> dict:
-
-    # Produzioni
-    produzione_base = base_kwp * resa_kwh_kwp
-    produzione_bonus_teorica, percentuale_clipping, produzione_bonus = apply_clipping(
+    consumo_kwh,
+    base_kwp,
     bonus_kwp,
+    prezzo_energia,
+    rid_eur_kwh,
+    cer_eur_kwh,
+    quota_condivisa,
+    costo_impianto,
     resa_kwh_kwp,
-    consumo_kwh
-)
-    # Autoconsumi teorici
-    autoc_base_teorico = consumo_kwh * autoc_base_perc
-    autoc_bonus_teorico = consumo_kwh * autoc_bonus_perc
+    autoc_base_perc,
+    autoc_bonus_perc=None,
+):
 
-    # Clamp fisico
-    autoconsumo_base = min(autoc_base_teorico, produzione_base)
-    autoconsumo_bonus = min(autoc_bonus_teorico, produzione_bonus)
+    # -------------------------------
+    # Produzione BASE
+    # -------------------------------
+    produzione_base = base_kwp * resa_kwh_kwp
 
-    # Energia immessa
-    energia_immessa = max(produzione_bonus - autoconsumo_bonus, 0)
+    # -------------------------------
+    # Produzione BONUS con clipping
+    # -------------------------------
+    produzione_bonus_teorica, percentuale_clipping, produzione_bonus = apply_clipping(
+        bonus_kwp,
+        resa_kwh_kwp,
+        consumo_kwh
+    )
 
-    # Delta autoconsumo reale
+    # -------------------------------
+    # Quota copertura BONUS automatica
+    # -------------------------------
+    if autoc_bonus_perc is None:
+        autoc_bonus_perc = quota_copertura_from_kwp(bonus_kwp)
+
+    # -------------------------------
+    # Copertura consumi
+    # -------------------------------
+    autoconsumo_base = min(consumo_kwh * autoc_base_perc, produzione_base)
+    autoconsumo_bonus = min(consumo_kwh * autoc_bonus_perc, produzione_bonus)
+
     delta_autoconsumo = max(autoconsumo_bonus - autoconsumo_base, 0)
 
-    # Extra autoconsumo (€)
+    # -------------------------------
+    # Energia immessa
+    # -------------------------------
+    energia_immessa = max(produzione_bonus - autoconsumo_bonus, 0)
+
+    # -------------------------------
+    # Benefici economici
+    # -------------------------------
     vantaggio_extra_autoconsumo = delta_autoconsumo * prezzo_energia
 
-    # RID e CER
     rid_annuo = energia_immessa * rid_eur_kwh
     cer_prudente = energia_immessa * quota_condivisa * cer_eur_kwh
 
@@ -157,58 +139,81 @@ def compute_benefits(
         + cer_prudente
     )
 
+    # -------------------------------
     # Detrazione fiscale
+    # -------------------------------
     detrazione_totale = costo_impianto * 0.50
     detrazione_annua = detrazione_totale / 10
 
     beneficio_annuale_totale = totale_benefici_annui + detrazione_annua
 
-    # Beneficio 10 anni
+    # -------------------------------
+    # Risparmio bolletta diretto
+    # -------------------------------
+    risparmio_bolletta = autoconsumo_base * prezzo_energia
+
+    # -------------------------------
+    # 10 ANNI
+    # -------------------------------
     beneficio_10_anni = beneficio_annuale_totale * 10
+    risparmio_complessivo_10 = (
+        beneficio_10_anni
+        + risparmio_bolletta * 10
+    )
 
-    # Beneficio 20 anni (detrazione solo per 10 anni)
-    beneficio_20_anni = (totale_benefici_annui * 20) + detrazione_totale
+    # -------------------------------
+    # 20 ANNI (detrazione solo primi 10)
+    # -------------------------------
+    beneficio_20_anni = (
+        totale_benefici_annui * 20
+        + detrazione_totale
+    )
 
-    # Risparmio bolletta (senza doppio conteggio extra)
-    risparmio_bolletta = max(
-        (autoconsumo_bonus - delta_autoconsumo),
-        0
-    ) * prezzo_energia
+    secondo_decennio = (
+        (beneficio_annuale_totale - detrazione_annua) * 10
+        + risparmio_bolletta * 10
+    )
 
-    # Risparmio complessivo
-    risparmio_complessivo_annuo = beneficio_annuale_totale + risparmio_bolletta
-    risparmio_complessivo_10 = beneficio_10_anni + (risparmio_bolletta * 10)
+    risparmio_complessivo_20 = (
+        risparmio_complessivo_10
+        + secondo_decennio
+    )
 
+    # -------------------------------
+    # RETURN
+    # -------------------------------
     return {
-        # Energia
+
+        # Produzione
         "produzione_base": produzione_base,
+        "produzione_bonus_teorica": produzione_bonus_teorica,
+        "percentuale_clipping": percentuale_clipping,
         "produzione_bonus": produzione_bonus,
+
+        # Copertura
         "autoconsumo_base": autoconsumo_base,
         "autoconsumo_bonus": autoconsumo_bonus,
-        "energia_immessa": energia_immessa,
         "delta_autoconsumo": delta_autoconsumo,
 
-        # Economico annuo
+        # Energia immessa
+        "energia_immessa": energia_immessa,
+
+        # Benefici annui
         "vantaggio_extra_autoconsumo": vantaggio_extra_autoconsumo,
         "rid_annuo": rid_annuo,
         "cer_prudente": cer_prudente,
         "totale_benefici_annui": totale_benefici_annui,
 
         # Detrazione
-        "detrazione_totale": detrazione_totale,
         "detrazione_annua": detrazione_annua,
-
-        # Totali
         "beneficio_annuale_totale": beneficio_annuale_totale,
+
+        # Risparmio bolletta
+        "risparmio_bolletta": risparmio_bolletta,
+
+        # Orizzonte temporale
         "beneficio_10_anni": beneficio_10_anni,
         "beneficio_20_anni": beneficio_20_anni,
-
-        # Bolletta
-        "risparmio_bolletta": risparmio_bolletta,
-        "risparmio_complessivo_annuo": risparmio_complessivo_annuo,
         "risparmio_complessivo_10": risparmio_complessivo_10,
-    
-        "produzione_bonus_teorica": produzione_bonus_teorica,
-        "percentuale_clipping": percentuale_clipping,
-        "produzione_bonus_post_clipping": produzione_bonus,
-        }
+        "risparmio_complessivo_20": risparmio_complessivo_20,
+    }
