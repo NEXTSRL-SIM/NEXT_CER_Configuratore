@@ -373,10 +373,9 @@ def build_pdf(cliente, res, costo_impianto):
         "e potenzialmente crescente nel tempo.",
         ""
         "NEXT SRL - Report sinulazione",
-        "",
         "valori indicativi",
         ""
-        f"{oggi}"
+        f"data {oggi}"
     ]
 
     for p in testo_chiusura:
