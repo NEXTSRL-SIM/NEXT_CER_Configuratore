@@ -389,12 +389,18 @@ def build_pdf(
 
     for anno in range(1, 31):
         if anno <= 10:
-            cumulato += beneficio_primi_10
+            beneficio_annuale = beneficio_primi_10
         else:
-            cumulato += beneficio_dal_11
-        if cumulato >= costo_impianto:
-            payback_anni = anno
+            beneficio_annuale = beneficio_dal_11
+
+        if cumulato + beneficio_annuale >= costo_impianto:
+            # quota residua da coprire
+            residuo = costo_impianto - cumulato
+            frazione_anno = residuo / beneficio_annuale
+            payback_anni = (anno - 1) + frazione_anno
             break
+
+        cumulato += beneficio_annuale
 
     # =============================
     # Testo descrittivo payback
