@@ -390,7 +390,7 @@ def build_pdf(
 
     story.append(Paragraph(
         f"0 = -{costo_impianto:,.0f} + Σ [ {res['risparmio_complessivo_annuo']:,.0f} · "
-        f"(1 + {incremento_prezzo_annuo:.2%})ᵗ⁻¹ / (1 + r)ᵗ ]   per t = 1 … 10",
+        f"(1 + {incremento:.2%})ᵗ⁻¹ / (1 + r)ᵗ ]   per t = 1 … 10",
         styles["Normal"]
     ))
     story.append(Spacer(1, 20))
