@@ -458,28 +458,25 @@ def build_pdf(
         f"Il grafico e i dati che precedono mostrano chiaramente che, nel corso di 10 anni, "
         f"il Risparmio Complessivo Totale generato dal Sistema di Rendita Energetica Attiva "
         f"supera ampiamente il capitale iniziale investito.",
-
-        "",
         f"In questo caso, è stato stimato un beneficio cumulato di € {vantaggio_10:,.2f} "
         f"a fronte di un investimento di € {costo_impianto:,.2f}.",
 
         f"<b>Non realizzare l’intervento significa rinunciare a un valore economico potenziale "
-        f"netto di oltre € {differenza_netto:,.2f} in 10 anni.</b>",
+        f"netto di oltre € {differenza_netto:,.2f} in 10 anni - risorse che rimangono nella bolletta energetica o nei costi di acquisto dalla rete.</b>",
         "",
         "In un contesto di mercati energetici volatili e strutturalmente in crescita, "
-        "proteggersi dal rischio di aumento dei costi dell’energia elettrica rappresenta "
+        "proteggersi dal rischio di aumento dei costi dell’energia elettrica non è un'opazione secondaria, ma rappresenta "
         "una leva di stabilità economica nel medio-lungo periodo.",
-        "",
-        "La presente simulazione non considera alcun incremento futuro dei prezzi dell’energia. "
+        "Secondo i dati storici, il prezzo medio dell'energia elettrica per la clientela domestica in Italia è cresciuto mediamente tra il 3% e il 5% all'anno negli ultimi 20 anni. Negli ultimi cicli di mercato questa dinamica si è ancor più accentuata, con impatti significativi sulle famiglie e sui budget familiari. La presente simulazione non considera alcun incremento futuro dei prezzi dell’energia. "
         "Qualora tali aumenti dovessero verificarsi, il beneficio economico cumulato "
         "risulterebbe ulteriormente maggiore.",
         "",
-        "In sintesi:",
-        "• l’impianto non è soltanto uno strumento di riduzione della bolletta;",
-        "• genera un flusso economico positivo nel tempo;",
-        "• riduce l’esposizione al rischio energetico;",
-        "• può essere supportato da soluzioni finanziarie dedicate.",
-
+        "In altre parole, ogni anno che passa senza realizzare l’intervento equivale a:",
+        "• perdere una opportunità di ridurre la spesa energetica;",
+        "• rinunciare a una rendita energetica positiva;",
+        "• esporsi ulteriormente all’aumento dei costi dell’energia.",
+        "",
+        "Questa dinamica si traduce in un costo opportunità concreto, che cresce con l’aumento dei prezzi econ l’allungamento dell’orizzonte temporale. In più, è possibile strutturare l’investimento con soluzioni di finanziamento dedicate, che consentono di distribuire la spesa nel tempo, spesso in modo sostenibile rispetto al flusso economico annuo generato dalla Rendita Energetica Attiva."
         "",
         "Scegliere di attivare il Sistema di Rendita Energetica Attiva Next significa "
         "trasformare una spesa energetica futura incerta in un flusso di valore definito "
