@@ -196,11 +196,11 @@ def build_pdf(
     story.append(Spacer(1, 12))
 
     testo_simulazione = [
-        f"Consumo annuo stimato: {consumo_kwh:,.0f} kWh",
-        f"Impianto base considerato: {base_kwp:.2f} kWp",
-        f"Impianto upgrade considerato: {bonus_kwp:.2f} kWp",
-        f"Resa ipotizzata per area geografica: {resa_kwh_kwp:,.0f} kWh/kWp",
-        f"Produzione teorica impianto upgrade: {res['produzione_bonus_teorica']:,.0f} kWh",
+        f"Consumo annuo stimato: <b>{consumo_kwh:,.0f} kWh</b>",
+        f"Impianto base considerato: <b>{base_kwp:.2f} kWp</b>",
+        f"Impianto upgrade considerato: <b>{bonus_kwp:.2f} kWp</b>",
+        f"Resa ipotizzata per area geografica: <b>{resa_kwh_kwp:,.0f} kWh/kWp</b>",
+        f"Produzione teorica impianto upgrade: <b>{res['produzione_bonus_teorica']:,.0f} kWh</b>",
     ]
 
     if res["percentuale_clipping"] > 0:
