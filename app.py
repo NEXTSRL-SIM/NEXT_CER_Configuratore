@@ -156,6 +156,8 @@ hr { border-color: #e8e5f0 !important; margin: 28px 0 !important; }
 }
 .metric-card.green .mc-value { color: #16a34a; }
 .metric-card.amber .mc-value { color: #d97706; }
+.metric-card.bold .mc-value { font-weight: 700; font-size: 26px; }
+.metric-card.bold .mc-label { font-weight: 600; color: #1e1b2e; }
 
 .highlight-box {
     background: rgba(124,58,237,0.06);
@@ -195,6 +197,30 @@ hr { border-color: #e8e5f0 !important; margin: 28px 0 !important; }
     margin-top: 6px;
 }
 
+/* Intro description box */
+.intro-box {
+    background: #ffffff;
+    border: 1px solid #e8e5f0;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 16px 0 24px 0;
+    line-height: 1.7;
+}
+.intro-box p {
+    font-size: 15px !important;
+    color: #1e1b2e !important;
+    margin-bottom: 10px !important;
+}
+.intro-box ul {
+    margin: 8px 0 8px 20px;
+    padding: 0;
+}
+.intro-box ul li {
+    font-size: 15px !important;
+    color: #1e1b2e !important;
+    margin-bottom: 4px;
+}
+
 .row-widget.stHorizontalBlock { gap: 16px; }
 </style>
 """, unsafe_allow_html=True)
@@ -229,8 +255,26 @@ def metric_card(label, value, style=""):
 # =========================================================
 st.markdown("""
 <div style="margin-bottom:8px">
-    <h1 style="font-size:28px;font-weight:600;margin:0 0 6px;color:#1e1b2e">Configuratore CER</h1>
-    <p style="font-size:15px;color:#9b8fc7;margin:0">Simulazione vantaggi economici — Next S.r.l.</p>
+    <h1 style="font-size:34px;font-weight:700;margin:0 0 6px;color:#1e1b2e">Configuratore CER</h1>
+    <p style="font-size:15px;color:#9b8fc7;margin:0">Analisi Rendita Energetica Attiva — Next S.r.l.</p>
+</div>
+""", unsafe_allow_html=True)
+
+# =========================================================
+# DESCRIZIONE INTRODUTTIVA
+# =========================================================
+st.markdown("""
+<div class="intro-box">
+    <p>Configuratore commerciale per simulare i vantaggi economici di:</p>
+    <ul>
+        <li>Upgrade impianto NEXT con accumulo da 16 kWh</li>
+        <li>Comunità Energetica (CER) + Ritiro Dedicato (RID)</li>
+        <li>Extra autoconsumo grazie alla maggior potenza installata</li>
+        <li>Incremento annuo del costo dell'energia</li>
+        <li>Detrazione fiscale (50% in 10 anni)</li>
+        <li>Risparmio diretto in bolletta</li>
+    </ul>
+    <p>Il sistema calcola automaticamente la rendita energetica attiva generata dall'impianto, considerando tutti i benefici economici cumulati nel tempo.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -318,8 +362,8 @@ with c7: metric_card("CER incentivo", f"€ {res['cer_prudente']:,.2f}")
 st.markdown("")
 
 c8, c9 = st.columns(2)
-with c8: metric_card("Totale benefici annui", f"€ {res['totale_benefici_annui']:,.2f}")
-with c9: metric_card("Detrazione fiscale annua", f"€ {res['detrazione_annua']:,.2f}")
+with c8: metric_card("Totale benefici annui", f"€ {res['totale_benefici_annui']:,.2f}", "bold")
+with c9: metric_card("Detrazione fiscale annua", f"€ {res['detrazione_annua']:,.2f}", "bold")
 
 st.markdown(f"""
 <div class="highlight-box">
