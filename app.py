@@ -197,7 +197,6 @@ hr { border-color: #e8e5f0 !important; margin: 28px 0 !important; }
     margin-top: 6px;
 }
 
-/* Intro description box */
 .intro-box {
     background: #ffffff;
     border: 1px solid #e8e5f0;
@@ -255,8 +254,8 @@ def metric_card(label, value, style=""):
 # =========================================================
 st.markdown("""
 <div style="margin-bottom:8px">
-    <h1 style="font-size:34px;font-weight:700;margin:0 0 6px;color:#1e1b2e">Configuratore CER</h1>
-    <p style="font-size:15px;color:#9b8fc7;margin:0">Analisi Rendita Energetica Attiva — Next S.r.l.</p>
+    <h1 style="font-size:20px;font-weight:600;margin:0 0 6px;color:#1e1b2e">Configuratore CER</h1>
+    <p style="font-size:13px;color:#9b8fc7;margin:0">Analisi Rendita Energetica Attiva — Next S.r.l.</p>
 </div>
 """, unsafe_allow_html=True)
 
