@@ -107,6 +107,21 @@ p, span, label, .stMarkdown, div {
 
 hr { border-color: #e8e5f0 !important; margin: 28px 0 !important; }
 
+.page-title {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    color: #1e1b2e !important;
+    margin: 0 0 6px 0 !important;
+    line-height: 1.2 !important;
+}
+
+.page-subtitle {
+    font-size: 14px !important;
+    color: #9b8fc7 !important;
+    margin: 0 !important;
+}
+
 .section-hdr {
     display: flex;
     align-items: center;
@@ -254,8 +269,8 @@ def metric_card(label, value, style=""):
 # =========================================================
 st.markdown("""
 <div style="margin-bottom:8px">
-    <h1 style="font-size:20px;font-weight:600;margin:0 0 6px;color:#1e1b2e">Configuratore CER</h1>
-    <p style="font-size:13px;color:#9b8fc7;margin:0">Analisi Rendita Energetica Attiva — Next S.r.l.</p>
+    <div class="page-title">Configuratore CER</div>
+    <div class="page-subtitle">Analisi Rendita Energetica Attiva — Next S.r.l.</div>
 </div>
 """, unsafe_allow_html=True)
 
