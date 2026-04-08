@@ -679,7 +679,7 @@ def chart_fascia(fascia_n, f_min, f_max, rows, prezzo, base_kwp, bonus_kwp):
 
         # legenda LED
         if is_base_card:
-            leg_items = [(H["g1"], "Moduli base"), (H["g3"], "Upgrade incl."), (H["grb"], "Non incl.")]
+            leg_items = [(H["g1"], "Moduli base"), (H["g3"], "Upgrade incl."), ("#ECEFF1", "Non incl.")]
         else:
             leg_items = [(H["g1"], "Moduli base"), (H["g3"], "Extra inclusi")]
         for li, (fc2, lb2) in enumerate(leg_items):
