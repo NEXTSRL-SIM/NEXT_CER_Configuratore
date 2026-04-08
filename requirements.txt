@@ -3,3 +3,4 @@ reportlab
 matplotlib
 pandas
 numpy-financial
+html2image
