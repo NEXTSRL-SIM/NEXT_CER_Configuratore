@@ -882,7 +882,8 @@ import numpy_financial as npf, datetime, os
 
 H = {"g1":"#1B4332","g2":"#2D6A4F","g3":"#52B788","g4":"#95D5B2",
      "g5":"#D8F3DC","gb2":"#B7E4C7","au":"#E9C46A","am":"#F4A261",
-     "ab":"#E76F51","abg":"#FFF8E7","grd":"#263238","grm":"#78909C"}
+     "ab":"#E76F51","abg":"#FFF8E7","grd":"#263238","grm":"#78909C",
+     "grb":"#ECEFF1"}
 
 def _save(fig, name):
     p = f"/tmp/{name}_{int(datetime.datetime.now().timestamp())}.png"
