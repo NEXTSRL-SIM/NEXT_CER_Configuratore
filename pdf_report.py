@@ -3,7 +3,7 @@ report_next_definitivo.py
 Struttura originale fedelissima + schede impianti LED + tabelle migliorate
 Palette Verde Foresta #1B4332 + Oro #E9C46A
 """
-import datetime, os, math, subprocess
+import datetime, os, math
 import numpy_financial as npf
 import matplotlib
 matplotlib.use("Agg")
@@ -569,17 +569,37 @@ th.r{{text-align:right}}td{{border-bottom:0.5px solid #B7E4C7}}tr:last-child td{
 
 
 def render_fascia_png(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa=1200, wp=410):
-    html     = _fascia_html(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa, wp)
-    html_p   = f"/tmp/fascia{fascia_n}_{int(datetime.datetime.now().timestamp())}.html"
-    img_p    = f"/tmp/fascia{fascia_n}_{int(datetime.datetime.now().timestamp())}.png"
-    with open(html_p, "w") as f: f.write(html)
-    subprocess.run([
-        "wkhtmltoimage", "--width", "794", "--quality", "95",
-        "--format", "png", "--disable-smart-width",
-        html_p, img_p
-    ], capture_output=True)
-    try: os.remove(html_p)
-    except: pass
+    import tempfile
+    n_inst  = math.ceil(mKwp * 1000 / wp)
+    prod_m  = round(mKwp * resa)
+
+    fig, ax = plt.subplots(figsize=(10, 2.6))
+    fig.patch.set_facecolor('#FAFDF7')
+    ax.set_facecolor('#FAFDF7')
+    ax.set_xlim(0, 10); ax.set_ylim(0, 1); ax.axis('off')
+
+    # barra range verde chiaro
+    ax.add_patch(mpatches.FancyBboxPatch((0.3, 0.18), 7.0, 0.30,
+        boxstyle="round,pad=0.01", facecolor='#D1FAE5', edgecolor='#6EE7B7', lw=1.2))
+    # barra installata verde scuro
+    frac = min((mKwp - fmin) / max(fmax - fmin, 0.01), 1.0)
+    ax.add_patch(mpatches.FancyBboxPatch((0.3, 0.18), 7.0 * frac, 0.30,
+        boxstyle="round,pad=0.01", facecolor='#1B4332', edgecolor='none'))
+
+    # testi
+    ax.text(5, 0.82,
+            f"FASCIA {fascia_n}  —  {fmin} ÷ {fmax} kWp  |  Prezzo base € {prezzo:,.0f}".replace(",", "."),
+            ha='center', va='center', fontsize=10, fontweight='bold', color='#1B4332')
+    ax.text(0.3,       0.10, f"{fmin} kWp", ha='left',  va='top', fontsize=8, color='#6b7280')
+    ax.text(7.3,       0.10, f"{fmax} kWp", ha='right', va='top', fontsize=8, color='#6b7280')
+    ax.text(0.3 + 7.0 * frac, 0.52,
+            f"Installato: {mKwp:.2f} kWp  ({n_inst} mod.)  —  prod. {prod_m:,} kWh/a".replace(",", "."),
+            ha='center', va='bottom', fontsize=8.5, color='#E9C46A', fontweight='bold')
+
+    plt.tight_layout(pad=0.2)
+    img_p = os.path.join(tempfile.gettempdir(), f"fascia_{fascia_n}_{n_inst}.png")
+    fig.savefig(img_p, dpi=120, bbox_inches='tight', facecolor=fig.get_facecolor())
+    plt.close(fig)
     return img_p
 
 
