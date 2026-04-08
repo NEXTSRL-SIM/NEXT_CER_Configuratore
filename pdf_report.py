@@ -13,7 +13,7 @@ from matplotlib.patches import FancyBboxPatch
 import numpy as np
 
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import mm, inch
+from reportlab.lib.units import mm, inc
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
