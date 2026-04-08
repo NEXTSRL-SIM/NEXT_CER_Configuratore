@@ -569,38 +569,15 @@ th.r{{text-align:right}}td{{border-bottom:0.5px solid #B7E4C7}}tr:last-child td{
 
 
 def render_fascia_png(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa=1200, wp=410):
-    import tempfile
-    n_inst  = math.ceil(mKwp * 1000 / wp)
-    prod_m  = round(mKwp * resa)
-
-    fig, ax = plt.subplots(figsize=(10, 2.6))
-    fig.patch.set_facecolor('#FAFDF7')
-    ax.set_facecolor('#FAFDF7')
-    ax.set_xlim(0, 10); ax.set_ylim(0, 1); ax.axis('off')
-
-    # barra range verde chiaro
-    ax.add_patch(mpatches.FancyBboxPatch((0.3, 0.18), 7.0, 0.30,
-        boxstyle="round,pad=0.01", facecolor='#D1FAE5', edgecolor='#6EE7B7', lw=1.2))
-    # barra installata verde scuro
-    frac = min((mKwp - fmin) / max(fmax - fmin, 0.01), 1.0)
-    ax.add_patch(mpatches.FancyBboxPatch((0.3, 0.18), 7.0 * frac, 0.30,
-        boxstyle="round,pad=0.01", facecolor='#1B4332', edgecolor='none'))
-
-    # testi
-    ax.text(5, 0.82,
-            f"FASCIA {fascia_n}  —  {fmin} ÷ {fmax} kWp  |  Prezzo base € {prezzo:,.0f}".replace(",", "."),
-            ha='center', va='center', fontsize=10, fontweight='bold', color='#1B4332')
-    ax.text(0.3,       0.10, f"{fmin} kWp", ha='left',  va='top', fontsize=8, color='#6b7280')
-    ax.text(7.3,       0.10, f"{fmax} kWp", ha='right', va='top', fontsize=8, color='#6b7280')
-    ax.text(0.3 + 7.0 * frac, 0.52,
-            f"Installato: {mKwp:.2f} kWp  ({n_inst} mod.)  —  prod. {prod_m:,} kWh/a".replace(",", "."),
-            ha='center', va='bottom', fontsize=8.5, color='#E9C46A', fontweight='bold')
-
-    plt.tight_layout(pad=0.2)
-    img_p = os.path.join(tempfile.gettempdir(), f"fascia_{fascia_n}_{n_inst}.png")
-    fig.savefig(img_p, dpi=120, bbox_inches='tight', facecolor=fig.get_facecolor())
-    plt.close(fig)
-    return img_p
+    """Delega a chart_fascia — matplotlib puro, nessun wkhtmltoimage."""
+    wp_kw  = wp / 1000
+    n_base = round(bKwp / wp_kw)
+    n_max  = round(mKwp / wp_kw)
+    rows   = []
+    for nm in range(n_base, n_max + 1):
+        kwp_r = round(nm * wp_kw, 2)
+        rows.append((nm, kwp_r, nm == n_base))
+    return chart_fascia(fascia_n, fmin, fmax, rows, prezzo, bKwp, mKwp)
 
 
 # ═══════════════════════════════════════════
@@ -1044,39 +1021,78 @@ def make_irr_image(costo, flusso_ann, incremento):
 
 def make_confronto_html(irr_pct):
     strumenti = [
-        ("Rendita Attiva Next\n(questa simulazione)", irr_pct,  H['g1'],  True,  "No"),
-        ("Azionario globale (storico)",               7.0,       H['g2'],  False, "Sì"),
-        ("Fondi bilanciati (storico)",                5.5,       H['g3'],  False, "Sì"),
-        ("Obbligazioni societarie IG",                4.5,       H['g3'],  False, "Sì"),
-        ("BTP decennale",                             3.8,       H['g4'],  False, "Sì"),
-        ("Conto deposito vincolato",                  3.5,       H['g4'],  False, "Parz."),
+        ("Rendita Attiva Next (questa simulazione)", irr_pct,  H['g1'], True,  "No"),
+        ("BTP decennale",                            3.8,       H['g3'], False, "Sì"),
+        ("Conto deposito vincolato",                 3.5,       H['g3'], False, "Parz."),
+        ("Obbligazioni societarie IG",               4.5,       H['g3'], False, "Sì"),
+        ("Fondi bilanciati (storico)",               5.5,       H['g3'], False, "Sì"),
+        ("Azionario globale (storico)",              7.0,       H['g2'], False, "Sì"),
     ]
-    nomi   = [s[0] for s in strumenti]
-    valori = [s[1] for s in strumenti]
-    colori = [s[2] for s in strumenti]
 
-    fig, ax = plt.subplots(figsize=(7.4, 3.8), facecolor='white')
-    ax.set_facecolor('#F9FFFA')
-    bars = ax.barh(nomi, valori, color=colori, height=0.55,
-                   edgecolor='white', linewidth=0.8)
+    n    = len(strumenti)
+    FW   = 7.4
+    RH   = 0.52    # altezza riga
+    HDR  = 0.46    # altezza header tabella
+    TOP  = 0.50    # titolo sezione
+    FIG_H = TOP + HDR + n * RH + 0.20
 
-    for bar, val, s in zip(bars, valori, strumenti):
-        ax.text(bar.get_width() + 0.15, bar.get_y() + bar.get_height()/2,
-                f"{val:.1f}%", va='center', fontsize=9.5,
-                fontweight='bold' if s[3] else 'normal',
-                color=H['g1'] if s[3] else H['grm'])
+    fig = plt.figure(figsize=(FW, FIG_H), facecolor='white')
+    ax  = fig.add_axes([0, 0, 1, 1])
+    ax.set_facecolor('white'); ax.axis('off')
+    ax.set_xlim(0, FW); ax.set_ylim(0, FIG_H)
 
-    ax.set_xlabel("Rendimento annuo (%)", fontsize=8.5, color=H['grm'])
-    ax.set_title("Confronto rendimenti — Dove investi meglio?",
-                 pad=10, fontsize=10.5, fontweight='bold', color=H['g1'])
-    ax.set_xlim(0, max(valori) * 1.30)
-    ax.invert_yaxis()
-    ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
-    ax.spines['left'].set_color(H['gb2']); ax.spines['bottom'].set_color(H['gb2'])
-    ax.tick_params(labelsize=8.5, left=False)
-    ax.grid(axis='x', alpha=0.4, lw=0.7, color=H['gb2'])
+    def rbox(x, y, w, h, fc, ec='none', lw=0.8, r=0.04):
+        ax.add_patch(FancyBboxPatch((x, y), w, h,
+            boxstyle=f'round,pad={r}', facecolor=fc, edgecolor=ec, linewidth=lw, zorder=2))
 
-    fig.tight_layout(pad=0.5)
+    def t(x, y, s, **kw):
+        ax.text(x, y, s, zorder=3, **kw)
+
+    # ── Titolo sezione ──────────────────────────────────────────────────────
+    rbox(0.08, FIG_H - TOP + 0.04, FW - 0.16, TOP - 0.08, H['g1'], r=0.05)
+    t(FW/2, FIG_H - TOP/2 + 0.04,
+      "Rendimento annuo — confronto diretto",
+      ha='center', va='center', fontsize=11, fontweight='bold', color='white')
+    t(FW - 0.20, FIG_H - TOP/2 + 0.04,
+      "IRR calcolato vs benchmark di mercato",
+      ha='right', va='center', fontsize=7.5, color=H['g4'])
+
+    # ── Header tabella ──────────────────────────────────────────────────────
+    y_hdr = FIG_H - TOP - HDR
+    rbox(0.08, y_hdr, FW - 0.16, HDR, H['g2'], r=0.03)
+    for x_, lbl in [(0.20,'Strumento'), (3.20,'Rendimento visivo'),
+                    (6.20,'Rend. %'), (6.95,'Liquidità')]:
+        t(x_, y_hdr + HDR/2, lbl, ha='left', va='center',
+          fontsize=8, fontweight='bold', color='white')
+
+    # ── Righe ───────────────────────────────────────────────────────────────
+    max_r = max(s[1] for s in strumenti)
+    BAR_MAX = 2.70   # larghezza max barra in unità
+
+    for i, (nome, pct, col, is_next, liq) in enumerate(strumenti):
+        ry   = y_hdr - (i + 1) * RH
+        bgfc = H['g5'] if is_next else ('white' if i % 2 == 0 else H['grb'])
+        rbox(0.08, ry, FW - 0.16, RH, bgfc, H['gb2'], lw=0.5, r=0.02)
+
+        fw_txt = 'bold' if is_next else 'normal'
+        t(0.20, ry + RH/2, nome, ha='left', va='center',
+          fontsize=8.5, fontweight=fw_txt, color=H['g1'])
+
+        # barra proporzionale
+        bw = (pct / max_r) * BAR_MAX
+        track_x = 3.20
+        rbox(track_x, ry + RH*0.30, BAR_MAX, RH*0.35, H['grb'], r=0.02)
+        rbox(track_x, ry + RH*0.30, bw,      RH*0.35, col,      r=0.02)
+
+        # percentuale
+        t(6.20, ry + RH/2, f"{pct:.1f}%", ha='left', va='center',
+          fontsize=10, fontweight=fw_txt, color=H['g1'])
+
+        # liquidità
+        liq_col = H['ab'] if liq == 'No' else (H['g2'] if liq == 'Sì' else H['am'])
+        t(6.95, ry + RH/2, liq, ha='left', va='center',
+          fontsize=8.5, color=liq_col, fontweight=fw_txt)
+
     return _save(fig, 'confronto')
 
 
