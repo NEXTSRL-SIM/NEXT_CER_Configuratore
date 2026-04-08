@@ -447,18 +447,14 @@ def _fascia_html(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa=1200, wp=410):
 
 
 def render_fascia_png(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa=1200, wp=410):
-    from html2image import Html2Image
-    html = _fascia_html(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa, wp)
-    ts   = int(datetime.datetime.now().timestamp())
-    hp   = f"/tmp/f{fascia_n}_{ts}.html"
-    ip   = f"f{fascia_n}_{ts}.png"
-    with open(hp, "w") as f: f.write(html)
-    hti  = Html2Image(output_path='/tmp',
-                      custom_flags=['--no-sandbox','--disable-gpu'])
-    hti.screenshot(html_file=hp, save_as=ip, size=(794, 1500))
-    try: os.remove(hp)
-    except: pass
-    return f"/tmp/{ip}"
+    wp_kw  = wp / 1000
+    n_base = round(bKwp / wp_kw)
+    n_max  = round(mKwp / wp_kw)
+    rows   = []
+    for nm in range(n_base, n_max + 1):
+        kwp_r = round(nm * wp_kw, 2)
+        rows.append((nm, kwp_r, nm == n_base))
+    return chart_fascia(fascia_n, fmin, fmax, rows, prezzo, bKwp, mKwp)
 
     rows = ""
     for nm in range(nBase, nUpg+1):
