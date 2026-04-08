@@ -447,42 +447,18 @@ def _fascia_html(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa=1200, wp=410):
 
 
 def render_fascia_png(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa=1200, wp=410):
-    html   = _fascia_html(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa, wp)
-    ts     = int(datetime.datetime.now().timestamp())
-    hp     = f"/tmp/f{fascia_n}_{ts}.html"
-    ip     = f"/tmp/f{fascia_n}_{ts}.png"
-    with open(hp,"w") as f: f.write(html)
-    subprocess.run(["wkhtmltoimage","--width","794","--quality","100",
-                    "--format","png","--disable-smart-width",hp,ip],
-                   capture_output=True)
+    from html2image import Html2Image
+    html = _fascia_html(fascia_n, fmin, fmax, prezzo, bKwp, mKwp, resa, wp)
+    ts   = int(datetime.datetime.now().timestamp())
+    hp   = f"/tmp/f{fascia_n}_{ts}.html"
+    ip   = f"f{fascia_n}_{ts}.png"
+    with open(hp, "w") as f: f.write(html)
+    hti  = Html2Image(output_path='/tmp',
+                      custom_flags=['--no-sandbox','--disable-gpu'])
+    hti.screenshot(html_file=hp, save_as=ip, size=(794, 1500))
     try: os.remove(hp)
     except: pass
-    return ip
-
-    def _fmt(n): return f"{round(n):,}".replace(",",".")
-    def _fk(v):  return f"{v:.2f}"
-
-    def leds(is_base):
-        h = ""
-        for ri, lbl in enumerate(["A","B"]):
-            mods = ""
-            for ci in range(perRow):
-                idx = ri*perRow+ci
-                if idx >= nUpg: break
-                if is_base:
-                    bg = "#1B4332" if idx < nBase else "#ECEFF1"
-                    bd = "none"    if idx < nBase else "0.5px solid #B7E4C7"
-                else:
-                    bg = "#1B4332" if idx < nBase else "#52B788"
-                    bd = "none"
-                mods += f'<div style="width:13px;height:8px;border-radius:1px;background:{bg};border:{bd};flex-shrink:0"></div>'
-            nc = nBase if is_base else nUpg
-            inf = f'<span style="font-size:10px;font-weight:600;color:#2D6A4F;margin-left:5px;white-space:nowrap">{nc} mod &middot; {_fk(nc*wpKw)} kWp</span>' if ri==0 else ""
-            h += f'''<div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">
-              <span style="font-size:10px;color:#78909C;width:36px;flex-shrink:0">Fila {lbl}</span>
-              <div style="display:flex;gap:2px">{mods}</div>{inf}
-            </div>'''
-        return h
+    return f"/tmp/{ip}"
 
     rows = ""
     for nm in range(nBase, nUpg+1):
