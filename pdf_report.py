@@ -1044,71 +1044,40 @@ def make_irr_image(costo, flusso_ann, incremento):
 
 def make_confronto_html(irr_pct):
     strumenti = [
-        ("Rendita Attiva Next (questa simulazione)", irr_pct,  "#1B4332", True,  "No"),
-        ("BTP decennale",                            3.8,       "#52B788", False, "Sì"),
-        ("Conto deposito vincolato",                 3.5,       "#52B788", False, "Parz."),
-        ("Obbligazioni societarie IG",               4.5,       "#52B788", False, "Sì"),
-        ("Fondi bilanciati (storico)",               5.5,       "#52B788", False, "Sì"),
-        ("Azionario globale (storico)",              7.0,       "#52B788", False, "Sì"),
+        ("Rendita Attiva Next\n(questa simulazione)", irr_pct,  H['g1'],  True,  "No"),
+        ("Azionario globale (storico)",               7.0,       H['g2'],  False, "Sì"),
+        ("Fondi bilanciati (storico)",                5.5,       H['g3'],  False, "Sì"),
+        ("Obbligazioni societarie IG",                4.5,       H['g3'],  False, "Sì"),
+        ("BTP decennale",                             3.8,       H['g4'],  False, "Sì"),
+        ("Conto deposito vincolato",                  3.5,       H['g4'],  False, "Parz."),
     ]
-    max_r = irr_pct
-    rows_html = ""
-    for nome, pct, bar_col, is_next, liq in strumenti:
-        bar_w = round(pct / max_r * 340)
-        track_w = 340
-        bg    = "#D8F3DC" if is_next else "white"
-        fw    = "700" if is_next else "400"
-        fs_nm = "13px" if is_next else "13px"
-        pct_s = f"{pct:.1f}%"
-        rows_html += f'''<tr style="background:{bg};border-bottom:1px solid #E8F5E9">
-          <td style="padding:14px 18px;font-size:{fs_nm};font-weight:{fw};color:#1B4332;width:38%">{nome}</td>
-          <td style="padding:14px 18px;width:42%">
-            <div style="position:relative;height:12px;background:#ECEFF1;border-radius:6px;width:{track_w}px">
-              <div style="position:absolute;top:0;left:0;height:12px;border-radius:6px;background:{bar_col};width:{bar_w}px"></div>
-            </div>
-          </td>
-          <td style="padding:14px 18px;text-align:center;font-size:15px;font-weight:{fw};color:#1B4332;width:12%">{pct_s}</td>
-          <td style="padding:14px 18px;text-align:center;font-size:13px;color:#78909C;width:8%">{liq}</td>
-        </tr>'''
+    nomi   = [s[0] for s in strumenti]
+    valori = [s[1] for s in strumenti]
+    colori = [s[2] for s in strumenti]
 
-    html = f'''<!DOCTYPE html><html><head><meta charset="utf-8">
-<style>*{{box-sizing:border-box;margin:0;padding:0}}
-body{{font-family:Helvetica,Arial,sans-serif;background:white;width:794px}}
-table{{border-collapse:collapse;width:100%}}
-</style></head><body>
-<div style="padding:0 13px">
-<div style="font-size:10px;font-weight:700;color:#2D6A4F;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;padding:0">
-  Comparazione con strumenti finanziari alternativi
-</div>
-<div style="border:1px solid #B7E4C7;border-radius:10px;overflow:hidden">
-  <div style="background:#1B4332;padding:14px 20px;display:table;width:100%">
-    <span style="display:table-cell;color:white;font-size:16px;font-weight:700">Rendimento annuo — confronto diretto</span>
-    <span style="display:table-cell;text-align:right;color:#52B788;font-size:13px;font-weight:600;vertical-align:middle">IRR calcolato vs benchmark di mercato</span>
-  </div>
-  <table>
-    <thead>
-      <tr style="background:#2D6A4F">
-        <th style="padding:10px 18px;text-align:left;color:white;font-size:11px;font-weight:700;letter-spacing:.05em">Strumento</th>
-        <th style="padding:10px 18px;text-align:center;color:white;font-size:11px;font-weight:700;letter-spacing:.05em">Rendimento visivo</th>
-        <th style="padding:10px 18px;text-align:center;color:white;font-size:11px;font-weight:700;letter-spacing:.05em">Rend.&nbsp;%</th>
-        <th style="padding:10px 18px;text-align:center;color:white;font-size:11px;font-weight:700;letter-spacing:.05em">Liquidit&agrave;</th>
-      </tr>
-    </thead>
-    <tbody>{rows_html}</tbody>
-  </table>
-</div>
-</div>
-</body></html>'''
+    fig, ax = plt.subplots(figsize=(7.4, 3.8), facecolor='white')
+    ax.set_facecolor('#F9FFFA')
+    bars = ax.barh(nomi, valori, color=colori, height=0.55,
+                   edgecolor='white', linewidth=0.8)
 
-    hp = f"/tmp/confronto_{_ts()}.html"
-    ip = f"/tmp/confronto_{_ts()}.png"
-    with open(hp,"w") as f: f.write(html)
-    subprocess.run(["wkhtmltoimage","--width","794","--quality","100",
-                    "--format","png","--disable-smart-width",hp,ip],
-                   capture_output=True)
-    try: os.remove(hp)
-    except: pass
-    return ip
+    for bar, val, s in zip(bars, valori, strumenti):
+        ax.text(bar.get_width() + 0.15, bar.get_y() + bar.get_height()/2,
+                f"{val:.1f}%", va='center', fontsize=9.5,
+                fontweight='bold' if s[3] else 'normal',
+                color=H['g1'] if s[3] else H['grm'])
+
+    ax.set_xlabel("Rendimento annuo (%)", fontsize=8.5, color=H['grm'])
+    ax.set_title("Confronto rendimenti — Dove investi meglio?",
+                 pad=10, fontsize=10.5, fontweight='bold', color=H['g1'])
+    ax.set_xlim(0, max(valori) * 1.30)
+    ax.invert_yaxis()
+    ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_color(H['gb2']); ax.spines['bottom'].set_color(H['gb2'])
+    ax.tick_params(labelsize=8.5, left=False)
+    ax.grid(axis='x', alpha=0.4, lw=0.7, color=H['gb2'])
+
+    fig.tight_layout(pad=0.5)
+    return _save(fig, 'confronto')
 
 
 # ── 3. BENEFICIO CUMULATO 10/20 anni con composizione voci ─────────────────
